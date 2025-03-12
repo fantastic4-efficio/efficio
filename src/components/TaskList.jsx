@@ -1,5 +1,5 @@
 import React, { useState } from "react";
- // Import styles
+
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([
@@ -11,16 +11,16 @@ const TaskList = () => {
 
   return (
     <div className="task-container">
-      <h2>Open Tasks</h2>
+      <h3>Open Tasks</h3>
       <ul className="task-list">
         {tasks.filter(task => task.status === "Open").map(task => (
-          <li key={task.id} className="task-item open">
+          <li key={task.id} className="task-item">
             {task.title}
           </li>
         ))}
       </ul>
 
-      <h2>Ongoing Tasks</h2>
+      <h3>Ongoing Tasks</h3>
       <ul className="task-list">
         {tasks.filter(task => task.status === "Ongoing").map(task => (
           <li key={task.id} className="task-item ongoing">
