@@ -11,7 +11,7 @@ const createTasks = async(owner, subject, description, project_id, priority, sta
        RETURNING *;
     `,[owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id])
 
-    console.log('Task created:', rows[0]);
+    console.log('Task created:', rows);
     return rows[0];
   } catch(err) {
     console.log(err);
