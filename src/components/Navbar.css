@@ -1,36 +1,41 @@
 .navbar {
-  background: linear-gradient(to right, #3b82f6, #9333ea);
-  color: white;
-  padding: 1rem;
+  width: 100%;
+  padding: 15px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+  background: linear-gradient(135deg, rgba(255, 0, 150, 0.4), rgba(0, 255, 255, 0.4));
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  animation: holographic 5s infinite linear alternate;
 }
 
-.nav-links {
-  display: flex;
-  gap: 20px;
+@keyframes holographic {
+  0% {
+    background: linear-gradient(135deg, rgba(255, 0, 150, 0.4), rgba(0, 255, 255, 0.4));
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  }
+  50% {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.4), rgba(255, 0, 150, 0.4));
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(255, 255, 0, 0.4), rgba(0, 255, 255, 0.4));
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+  }
 }
 
-.nav-links a {
+.navbar a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
 }
 
-.nav-links a:hover {
-  text-decoration: underline;
-}
-
-.mobile-menu {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-  .mobile-menu {
-    display: block;
-  }
+.navbar a:hover {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
