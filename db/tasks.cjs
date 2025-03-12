@@ -2,14 +2,14 @@ const client = require('./client.cjs');
 require('dotenv').config();
 
 
-const createTasks = async(id, owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id) => {
+const createTasks = async(owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id) => {
   
   try{
     const{ rows } = await client.query(`
-       INSERT INTO tasks (id, owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       INSERT INTO tasks (owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *;
-    `,[id, owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id])
+    `,[owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id])
 
     console.log('Task created:', rows[0]);
     return rows[0];
