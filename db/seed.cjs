@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const client = require('./client.cjs');
 const { createProjects } = require('./projects.cjs');
+const { createUsers } = require('./users.cjs');
 require('dotenv').config();
 console.log(`test`);
 
@@ -85,8 +86,19 @@ const syncAndSeed = async () => {
 
 
   console.log('creating users');
-  await
-    console.log('USERS CREATED');
+  await createUsers(`John`,`Doe`, `password123`, `johndoe`, `johndoe@example.com`);
+  await createUsers(`Jane`, `Smith`, `pass456`, `janesmith`, `janesmith@example.com`);
+  await createUsers(`Michael`, `Johnson`, `secret789`, `mikejohnson`, `mikej@example.com`);
+  await createUsers(`Emily`, `Williams`, `pass321`, `emilyw`, `emilyw@example.com`);
+  await createUsers(`Daniel`, `Brown`, `password999`, `danbrown`, `danbrown@example.com`);
+  await createUsers(`Olivia`, `Davis`, `securepass`, `oliviad`, `olivia.d@example.com`);
+  await createUsers(`James`, `Garcia`, `qwerty123`, `jamesg`, `jamesg@example.com`);
+  await createUsers(`Sophia`, `Martinez`, `12345secure`, `sophiam`, `sophiam@example.com`);
+  await createUsers(`William`, `Rodriguez`, `pass2023`, `williamr`, `williamr@example.com`);
+  await createUsers(`Isabella`, `Lee`, `mypassword1`, `isabellal`, `isabellal@example.com`);
+  await createUsers(`Ethan`, `Harris`, `secret456`, `ethanh`, `ethanh@example.com`);
+  await createUsers(`Mia`, `Clark`, `112233pass`, `miac`, `miac@example.com`);
+  console.log('USERS CREATED');
 
 
   console.log('creating projects');
