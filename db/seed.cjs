@@ -1,9 +1,9 @@
-const { v4: uuidv4 } = require('uuid');
 const client = require('./client.cjs');
+require('dotenv').config();
+
 const { createProjects } = require('./projects.cjs');
 const { createUsers } = require('./users.cjs');
-require('dotenv').config();
-console.log(`test`);
+const { createTasks } = require('./tasks.cjs');
 
 const dropTables = async () => {
   try {
@@ -19,10 +19,10 @@ const dropTables = async () => {
   }
 }
 
-const createTables = async () => {
+const createTables = async() => {
   try {
     await client.query(`
-      CREATE TABLE teams (
+ CREATE TABLE teams (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         team_name VARCHAR(75) NOT NULL
       );
@@ -86,36 +86,52 @@ const syncAndSeed = async () => {
 
 
   console.log('creating users');
-  await createUsers(`John`,`Doe`, `password123`, `johndoe`, `johndoe@example.com`);
-  await createUsers(`Jane`, `Smith`, `pass456`, `janesmith`, `janesmith@example.com`);
-  await createUsers(`Michael`, `Johnson`, `secret789`, `mikejohnson`, `mikej@example.com`);
-  await createUsers(`Emily`, `Williams`, `pass321`, `emilyw`, `emilyw@example.com`);
-  await createUsers(`Daniel`, `Brown`, `password999`, `danbrown`, `danbrown@example.com`);
-  await createUsers(`Olivia`, `Davis`, `securepass`, `oliviad`, `olivia.d@example.com`);
-  await createUsers(`James`, `Garcia`, `qwerty123`, `jamesg`, `jamesg@example.com`);
-  await createUsers(`Sophia`, `Martinez`, `12345secure`, `sophiam`, `sophiam@example.com`);
-  await createUsers(`William`, `Rodriguez`, `pass2023`, `williamr`, `williamr@example.com`);
-  await createUsers(`Isabella`, `Lee`, `mypassword1`, `isabellal`, `isabellal@example.com`);
-  await createUsers(`Ethan`, `Harris`, `secret456`, `ethanh`, `ethanh@example.com`);
-  await createUsers(`Mia`, `Clark`, `112233pass`, `miac`, `miac@example.com`);
+  const user1 = await createUsers(`John`,`Doe`, `password123`, `johndoe`, `johndoe@example.com`);
+  const user2 = await createUsers(`Jane`, `Smith`, `pass456`, `janesmith`, `janesmith@example.com`);
+  const user3 = await createUsers(`Michael`, `Johnson`, `secret789`, `mikejohnson`, `mikej@example.com`);
+  const user4 = await createUsers(`Emily`, `Williams`, `pass321`, `emilyw`, `emilyw@example.com`);
+  const user5 = await createUsers(`Daniel`, `Brown`, `password999`, `danbrown`, `danbrown@example.com`);
+  const user6 = await createUsers(`Olivia`, `Davis`, `securepass`, `oliviad`, `olivia.d@example.com`);
+  const user7 = await createUsers(`James`, `Garcia`, `qwerty123`, `jamesg`, `jamesg@example.com`);
+  const user8 = await createUsers(`Sophia`, `Martinez`, `12345secure`, `sophiam`, `sophiam@example.com`);
+  const user9 = await createUsers(`William`, `Rodriguez`, `pass2023`, `williamr`, `williamr@example.com`);
+  const user10 = await createUsers(`Isabella`, `Lee`, `mypassword1`, `isabellal`, `isabellal@example.com`);
+  const user11 = await createUsers(`Ethan`, `Harris`, `secret456`, `ethanh`, `ethanh@example.com`);
+  const user12 = await createUsers(`Mia`, `Clark`, `112233pass`, `miac`, `miac@example.com`);
   console.log('USERS CREATED');
 
 
   console.log('creating projects');
-  await createProjects(`Four Winds`, `A project to build a new website`, `In Progress`, `2021-01-01`, `2021-02-01`);
-  await createProjects(`Bagel Mania`, `A project dedicated to delicious bagels`, `In Progress`, `2021-01-01`, `2021-02-01`);
-  await createProjects(`Tea Time`, `With the power of Tea, our coding prevails!`, `In Progress`, `2021-01-01`, `2021-02-01`);
+  const project1 = await createProjects(`Four Winds`, `A project to build a new website`, `in-progress`, `2025-01-01`, `2025-06-01`);
+  const project2 = await createProjects(`Bagel Mania`, `A project dedicated to delicious bagels`, `in-progress`, `2025-01-06`, `2025-07-01`);
+  const project3 = await createProjects(`Tea Time`, `With the power of Tea, our coding prevails!`, `in-progress`, `2025-03-01`, `2025-12-01`);
+  const project4 = await createProjects(`Skyline ERP`, `Development of an enterprise resource planning system`, `completed`, `2025-02-15`, `2025-12-31`);
+  const project5 = await createProjects(`Cybersecurity Enhancement`, `Improving security protocols and infrastructure`, `in-progress`, `2025-02-01`, `2025-05-15`);
+  const project6 = await createProjects(`EdTech Learning Platform`, `Creating an interactive education platform with AI`, `paused`, `2025-05-01`, `2025-11-01`);
+
+
   console.log('PROJECTS CREATED');
 
 
-  console.log('creating tasks');
-  await
-    console.log('TASKS CREATED');
+  console.log('CREATING TASKS');
+  //Normal task 1
+  const task1 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
+  // Normal task 2
+  const task2 = await createTasks(`${user2.id}`, 'Write Documentation', 'Prepare user guides and API docs.',`${project2.id}`, 3, '2025-03-01', '2025-06-10', 'in-progress', null, null);
+  // High-priority urgent task
+  const task3 = await createTasks(`${user3.id}`, 'Fix Production Bug', 'Critical issue causing downtime.',`${project2.id}`, 5, '2025-02-10', '2025-04-01', 'in-progress', null, null);
+  // Task with parent
+  const task4 = await createTasks(`${user4.id}`, 'Database Optimization', 'Improve query performance and indexing.', `${project3.id}`, 3, '2025-03-03', '2025-03-31', 'in-progress',`${task2.id}`, null);
+  // Parent task with subtask
+  const task5 = await createTasks(`${user5.id}`, 'Develop Authentication System', 'Create user authentication using JWT.',`${project3.id}`, 2, '2025-02-04', '2025-04-20', 'in-progress', null, `${task3.id}`);
+  // Subtask of the above parent task
+  const task6 = await createTasks(`${user6.id}`, 'Build Login API', 'Develop API for login and authentication.',`${project5.id}`, 1, '2025-03-05', '2025-03-29', 'in-progress', `${task3.id}`, null);
+  // Paused task
+  const task7 = await createTasks(`${user7.id}`, 'Complete UI Testing', 'Ensure UI is bug-free and responsive.',`${project6.id}`, 0, '2025-02-20', '2025-03-05', 'paused', null, null);
+  // Completed Task
+  const task8 = await createTasks(`${user8.id}`, 'Deploy App to Production', 'Make the final release live.',`${project4.id}`, 1, '2025-01-07', '2025-02-08', 'completed', null, null);
+  console.log('TASKS CREATED');
 
-
-  console.log(`creating teams`);
-  await
-    console.log(`TEAMS CREATED`);
 
 
   await client.end();

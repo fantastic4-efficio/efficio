@@ -8,7 +8,7 @@ const createUsers = async (first_name, last_name, password, username, email) => 
       RETURNING *;
     `, [first_name, last_name, password, username, email]);
 
-    return rows;
+    return rows[0];
   } catch (error) {
     throw error;
   }
