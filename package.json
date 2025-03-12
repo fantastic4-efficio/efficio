@@ -21,7 +21,6 @@
   "homepage": "https://github.com/fantastic4-efficio/efficio#readme",
   "description": "",
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.13",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.7",
