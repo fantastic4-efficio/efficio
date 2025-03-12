@@ -1,4 +1,6 @@
+const { v4: uuidv4 } = require('uuid');
 const client = require('./client.cjs');
+<<<<<<< HEAD
 const {v4: uuidv4} = require('uuid');
 
 const{createTasks} = require('./tasks.cjs');
@@ -22,6 +24,31 @@ const createTables = async() => {
   try {
     await client.query(`
  CREATE TABLE teams (
+=======
+const { createProjects } = require('./projects.cjs');
+const { createUsers } = require('./users.cjs');
+require('dotenv').config();
+console.log(`test`);
+
+const dropTables = async () => {
+  try {
+    await client.query(`
+      ALTER TABLE IF EXISTS teams DROP COLUMN IF EXISTS project_id;
+      DROP TABLE IF EXISTS tasks;
+      DROP TABLE IF EXISTS projects;
+      DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS teams;
+      `);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const createTables = async () => {
+  try {
+    await client.query(`
+      CREATE TABLE teams (
+>>>>>>> origin/main
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         team_name VARCHAR(75) NOT NULL
       );
@@ -62,32 +89,65 @@ const createTables = async() => {
 
       ALTER TABLE teams
       ADD COLUMN project_id UUID REFERENCES projects(id);
+<<<<<<< HEAD
     `);
   } catch(err) {
+=======
+      `);
+  } catch (err) {
+>>>>>>> origin/main
     console.log(err);
   }
 }
 
 
-const syncAndSeed = async() => {
+const syncAndSeed = async () => {
   await client.connect();
   console.log('CONNECTED TO THE DB');
 
+<<<<<<< HEAD
   console.log('DROPPING TABLES');
   await dropTables();
   console.log('TABLES DROPPED');
 
   console.log('CREATING TABLES');
+=======
+
+  console.log('dropping tables');
+  await dropTables();
+  console.log('TABLES DROPPED');
+
+
+  console.log('creating tables');
+>>>>>>> origin/main
   await createTables();
   console.log('TABLES CREATED');
 
-  console.log('CREATING USERS');
+
+  console.log('creating users');
+  await createUsers(`John`,`Doe`, `password123`, `johndoe`, `johndoe@example.com`);
+  await createUsers(`Jane`, `Smith`, `pass456`, `janesmith`, `janesmith@example.com`);
+  await createUsers(`Michael`, `Johnson`, `secret789`, `mikejohnson`, `mikej@example.com`);
+  await createUsers(`Emily`, `Williams`, `pass321`, `emilyw`, `emilyw@example.com`);
+  await createUsers(`Daniel`, `Brown`, `password999`, `danbrown`, `danbrown@example.com`);
+  await createUsers(`Olivia`, `Davis`, `securepass`, `oliviad`, `olivia.d@example.com`);
+  await createUsers(`James`, `Garcia`, `qwerty123`, `jamesg`, `jamesg@example.com`);
+  await createUsers(`Sophia`, `Martinez`, `12345secure`, `sophiam`, `sophiam@example.com`);
+  await createUsers(`William`, `Rodriguez`, `pass2023`, `williamr`, `williamr@example.com`);
+  await createUsers(`Isabella`, `Lee`, `mypassword1`, `isabellal`, `isabellal@example.com`);
+  await createUsers(`Ethan`, `Harris`, `secret456`, `ethanh`, `ethanh@example.com`);
+  await createUsers(`Mia`, `Clark`, `112233pass`, `miac`, `miac@example.com`);
   console.log('USERS CREATED');
 
-  console.log('CREATING PROJECTS');
+
+  console.log('creating projects');
+  await createProjects(`Four Winds`, `A project to build a new website`, `In Progress`, `2021-01-01`, `2021-02-01`);
+  await createProjects(`Bagel Mania`, `A project dedicated to delicious bagels`, `In Progress`, `2021-01-01`, `2021-02-01`);
+  await createProjects(`Tea Time`, `With the power of Tea, our coding prevails!`, `In Progress`, `2021-01-01`, `2021-02-01`);
   console.log('PROJECTS CREATED');
 
 
+<<<<<<< HEAD
 
   console.log('CREATING TASKS');
   //Normal task 1
@@ -107,6 +167,17 @@ const syncAndSeed = async() => {
   // Completed Task
   await createTasks(uuidv4(), uuidv4(), 'Deploy App to Production', 'Make the final release live.', uuidv4(), 1, '2025-01-07', '2025-02-08', 'completed', null, null);
   console.log('TASKS CREATED');
+=======
+  console.log('creating tasks');
+  await
+    console.log('TASKS CREATED');
+
+
+  console.log(`creating teams`);
+  await
+    console.log(`TEAMS CREATED`);
+
+>>>>>>> origin/main
 
 
 

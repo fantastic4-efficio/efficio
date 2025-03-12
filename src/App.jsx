@@ -1,11 +1,24 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Dashboard from "./components/Dashboard";
+import CalendarPage from "./components/CalendarPage";
 
-function App() {
-
+const App = () => {
   return (
-    <>
-    <h1>Test</h1>
-    </>
-  )
-}
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} /> 
+        <Route path="/calendar" element={<CalendarDebug />} /> {/* ✅ Test Logging */}
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+const CalendarDebug = () => {
+  console.log("Calendar Page Loaded");
+  return <CalendarPage />;
+};
+
+export default App;
