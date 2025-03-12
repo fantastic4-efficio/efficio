@@ -21,19 +21,47 @@ const dropTables = async() => {
 const createTables = async() => {
   try {
     await client.query(`
+ CREATE TABLE teams (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        team_name VARCHAR(75) NOT NULL
+      );
+      
+      CREATE TABLE users (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        first_name VARCHAR(30) NOT NULL,
+        last_name VARCHAR(30) NOT NULL,
+        username VARCHAR(120) UNIQUE NOT NULL,
+        password VARCHAR(60) NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        team_id UUID REFERENCES teams(id)
+      );
+
+      CREATE TABLE projects (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        project_name VARCHAR(150) NOT NULL,
+        description TEXT NOT NULL,
+        status VARCHAR(30) NOT NULL,
+        start_date DATE NOT NULL,
+        due_date DATE NOT NULL, 
+        team_id UUID REFERENCES teams(id)
+      );
+
       CREATE TABLE tasks (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        owner UUID gen_random_uuid() NOT NULL, 
+        owner UUID REFERENCES users(id) NOT NULL,
         subject VARCHAR(150),
         description TEXT,
-        project_id UUID gen_random_uuid() NOT NULL,
+        project_id UUID REFERENCES projects(id) NOT NULL,
         priority SMALLINT,
         start_date DATE,
         end_date DATE,
         status TEXT,
-        parent_task_id UUID gen_random_uuid(),
-        sub_task_id UUID gen_random_uuid()
+        parent_task_id UUID,
+        sub_task_id UUID
       );
+
+      ALTER TABLE teams
+      ADD COLUMN project_id UUID REFERENCES projects(id);
     `);
   } catch(err) {
     console.log(err);
