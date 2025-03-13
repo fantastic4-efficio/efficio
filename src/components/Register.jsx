@@ -1,13 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleRegister = (e) => {
     e.preventDefault();
-    alert(`Registration Attempt: Email: ${email}`);
+
+    if (!username || !password || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setSuccess("Registration successful!"); // Just a message, no authentication or redirection
+    setError(""); 
   };
 
   return (
@@ -15,10 +29,10 @@ export default function Register() {
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
         <br />
@@ -40,6 +54,7 @@ export default function Register() {
         <br />
         <button type="submit">Register</button>
       </form>
+      <p>Already have an account? <a href="/login">Login</a></p>
     </div>
   );
 }
