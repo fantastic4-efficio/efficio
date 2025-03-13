@@ -75,17 +75,17 @@ const syncAndSeed = async () => {
   console.log('CONNECTED TO THE DB');
 
 
-  console.log('dropping tables');
+  console.log('DROPPING TABLES');
   await dropTables();
   console.log('TABLES DROPPED');
 
 
-  console.log('creating tables');
+  console.log('CREATING TABLES');
   await createTables();
   console.log('TABLES CREATED');
 
 
-  console.log('creating users');
+  console.log('CREATING USERS');
   const user1 = await createUsers(`John`,`Doe`, `password123`, `johndoe`, `johndoe@example.com`);
   const user2 = await createUsers(`Jane`, `Smith`, `pass456`, `janesmith`, `janesmith@example.com`);
   const user3 = await createUsers(`Michael`, `Johnson`, `secret789`, `mikejohnson`, `mikej@example.com`);
@@ -101,15 +101,13 @@ const syncAndSeed = async () => {
   console.log('USERS CREATED');
 
 
-  console.log('creating projects');
+  console.log('CREATING PROJECTS');
   const project1 = await createProjects(`Four Winds`, `A project to build a new website`, `in-progress`, `2025-01-01`, `2025-06-01`);
   const project2 = await createProjects(`Bagel Mania`, `A project dedicated to delicious bagels`, `in-progress`, `2025-01-06`, `2025-07-01`);
   const project3 = await createProjects(`Tea Time`, `With the power of Tea, our coding prevails!`, `in-progress`, `2025-03-01`, `2025-12-01`);
   const project4 = await createProjects(`Skyline ERP`, `Development of an enterprise resource planning system`, `completed`, `2025-02-15`, `2025-12-31`);
   const project5 = await createProjects(`Cybersecurity Enhancement`, `Improving security protocols and infrastructure`, `in-progress`, `2025-02-01`, `2025-05-15`);
   const project6 = await createProjects(`EdTech Learning Platform`, `Creating an interactive education platform with AI`, `paused`, `2025-05-01`, `2025-11-01`);
-
-
   console.log('PROJECTS CREATED');
 
 
