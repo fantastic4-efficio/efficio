@@ -11,7 +11,7 @@ app.use(express.static('dist'));
 require('dotenv').config();
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html');
+  res.sendFile(`${__dirname}/dist/index.html`);
 })
 
 // GET - read projects by users
