@@ -10,6 +10,10 @@ app.use(express.json());
 app.use(express.static('dist'));
 require('dotenv').config();
 
+app.get('/', (req, res) => {
+  res.sendFile('index.html');
+})
+
 // GET - read projects by users
 app.get('/api/myproject/user/:user_id', async(req, res, next) => {
   const {user_id} = req.params;
