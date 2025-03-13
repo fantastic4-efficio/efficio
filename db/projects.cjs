@@ -16,10 +16,11 @@ const createProjects = async (project_name, description, status, start_date, due
 const getProjects = async (user_id) => {
   try {
     const { rows } = await client.query(`
-      SELECT * FROM projects
-      WHERE user_id = $1;
+      SELECT * FROM projects 
+      JOIN users ON projects.team_id = users.team_id
+      WHERE users.id = $1;
       `, [user_id]);
-    return rows;
+    return rows[0];
   } catch (error) {
     console.log(`Get Project Error`, error)
   }
