@@ -1,6 +1,7 @@
 const client = require('./client.cjs');
 require('dotenv').config();
 
+const { createTeams } = require('./teams.cjs');
 const { createProjects } = require('./projects.cjs');
 const { createUsers } = require('./users.cjs');
 const { createTasks } = require('./tasks.cjs');
@@ -8,11 +9,12 @@ const { createTasks } = require('./tasks.cjs');
 const dropTables = async () => {
   try {
     await client.query(`
-      ALTER TABLE IF EXISTS teams DROP COLUMN IF EXISTS project_id;
       DROP TABLE IF EXISTS tasks;
+      DROP TABLE IF EXISTS projects_teams;
+      DROP TABLE IF EXISTS teams_users;
       DROP TABLE IF EXISTS projects;
-      DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS teams;
+      DROP TABLE IF EXISTS users;
       `);
   } catch (err) {
     console.log(err);
@@ -22,7 +24,7 @@ const dropTables = async () => {
 const createTables = async() => {
   try {
     await client.query(`
- CREATE TABLE teams (
+      CREATE TABLE teams (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         team_name VARCHAR(75) NOT NULL
       );
@@ -33,8 +35,7 @@ const createTables = async() => {
         last_name VARCHAR(30) NOT NULL,
         username VARCHAR(120) UNIQUE NOT NULL,
         password VARCHAR(60) NOT NULL,
-        email VARCHAR(150) UNIQUE NOT NULL,
-        team_id UUID REFERENCES teams(id)
+        email VARCHAR(150) UNIQUE NOT NULL
       );
 
       CREATE TABLE projects (
@@ -43,8 +44,7 @@ const createTables = async() => {
         description TEXT NOT NULL,
         status VARCHAR(30) NOT NULL,
         start_date DATE NOT NULL,
-        due_date DATE NOT NULL, 
-        team_id UUID REFERENCES teams(id)
+        end_date DATE NOT NULL 
       );
 
       CREATE TABLE tasks (
@@ -61,8 +61,18 @@ const createTables = async() => {
         sub_task_id UUID
       );
 
-      ALTER TABLE teams
-      ADD COLUMN project_id UUID REFERENCES projects(id);
+      CREATE TABLE teams_users (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        team_id UUID REFERENCES teams(id) NOT NULL,
+        user_id UUID REFERENCES users(id) NOT NULL
+      );
+
+      CREATE TABLE projects_teams (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        project_id UUID REFERENCES projects(id) NOT NULL,
+        team_id UUID REFERENCES teams(id) NOT NULL
+      );
+      
       `);
   } catch (err) {
     console.log(err);
@@ -83,6 +93,15 @@ const syncAndSeed = async () => {
   console.log('CREATING TABLES');
   await createTables();
   console.log('TABLES CREATED');
+
+  console.log('CREATING TEAMS');
+  const team1 = await createTeams('Development');
+  const team2 = await createTeams('Design');
+  const team3 = await createTeams('Marketing');
+  const team4 = await createTeams('Technology');
+  const team5 = await createTeams('Finance');
+  const team6 = await createTeams('HR');
+  console.log('TEAMS CREATED');
 
 
   console.log('CREATING USERS');
