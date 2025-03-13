@@ -72,21 +72,40 @@ const deleteExistingTask = async(taskId) => {
 }
 
 
-// // PATCH
-// const updateExistingTask= async(taskId) => {
-//   try {
-//     const { rows: updatedTask } = await client.query(`
-//       UPDATE tasks
-//       SET ${setValue.join(', ')}
-//       WHERE id = $1
-//       RETURNING *;
-//     `,[taskId])
+// PATCH
+const updateExistingTask = async (taskId, updates) => {
+  try {
+    if (!Object.keys(updates).length) {
+      throw new Error("No fields provided for update.");
+    }
 
-//     return updatedTask[0];
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
+    let query = 'UPDATE tasks SET';
+    const values = [];
+    let index = 1;
+
+    // Dynamically construct the SQL query for partial updates
+    for (const [key, value] of Object.entries(updates)) {
+      query += ` ${key} = $${index},`;
+      values.push(value);
+      index++;
+    }
+
+    query = query.slice(0, -1); // Remove trailing comma
+    query += ` WHERE id = $${index} RETURNING *;`;
+    values.push(taskId);
+
+    const { rows } = await client.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("Task not found.");
+    }
+
+    return rows[0];
+  } catch (err) {
+    console.error("Error updating task:", err.message);
+    throw err;
+  }
+};
 
 
 
@@ -94,6 +113,6 @@ module.exports = {
   createTasks,
   fetchAllTasksByProducts,
   deleteExistingTask,
-  //updateExistingTask,
+  updateExistingTask,
   getMyTasks
 }
