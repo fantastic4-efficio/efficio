@@ -1,40 +1,37 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";  // ✅ Import Link
-import { loginUser } from "../api/auth"; // ✅ Ensure this API function exists
 
-const Login = () => {
-  const [username, setUsername] = useState("");
+export default function Login() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const data = await loginUser(username, password);
-      alert("Login successful!");
-      navigate("/dashboard"); // ✅ Redirect after login
-    } catch (err) {
-      setError("Invalid username or password");
-    }
+    alert(`Login Attempt: Email: ${email}, Password: ${password}`);
   };
 
   return (
-    <div className="auth-container">
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleLogin} className="auth-form">
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <br />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <br />
         <button type="submit">Login</button>
       </form>
-      
-      {/* ✅ Use Link instead of <a> */}
-      <p>Don't have an account? <Link to="/register">Register here</Link></p>
+      <p>Don't have an account? <a href="/register">Register</a></p>
     </div>
   );
-};
-
-export default Login;
+}

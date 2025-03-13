@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthProvider from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import NewTask from "./components/NewTask";
@@ -12,7 +11,6 @@ import Register from "./components/Register";  // ✅ Ensure correct path
 
 function App() {
   return (
-    <AuthProvider>
       <Router>
         <Navbar />
         <Routes>
@@ -26,7 +24,6 @@ function App() {
           <Route path="/register" element={<Register />} />  {/* ✅ Ensure this route exists */}
         </Routes>
       </Router>
-    </AuthProvider>
   );
 }
 
