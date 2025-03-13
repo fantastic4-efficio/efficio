@@ -12,7 +12,10 @@ client.connect();
 
 require('dotenv').config();
 
-
+// default route to pull the front end
+app.get('/',(res, req, next) => {
+  res.send('dist/index.html')
+}) 
 
 // GET - read projects by users
 app.get('/api/myproject/user/:user_id', async(req, res, next) => {
