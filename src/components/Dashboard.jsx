@@ -1,6 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
-import "./dashboard.css"; // Ensure styles are applied
+import "./Dashboard.css"; // Ensure styles are applied
 
 // Sample data for Pie and Bar Charts
 const pieData = [
