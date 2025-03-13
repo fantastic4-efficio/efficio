@@ -1,4 +1,5 @@
 const{fetchAllTasksByProducts,getMyTasks,deleteExistingTask,updateExistingTask,createTasks} = require('./db/tasks.cjs');
+const{createProjects, getProjects} = require('./db/projects.cjs');
 
 const express = require('express');
 const app = express();
@@ -11,6 +12,21 @@ client.connect();
 
 require('dotenv').config();
 
+
+
+// GET - read projects by users
+app.get('/api/myproject/user/:user_id', async(req, res, next) => {
+  const {user_id} = req.params;
+
+  try{
+    const projectByUser = await getProjects(user_id);
+
+    res.send(projectByUser);
+
+  } catch(err) {
+    next(err);
+  }
+});
 
 
 // GET - read all tasks by projects
