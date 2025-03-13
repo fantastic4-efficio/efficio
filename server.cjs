@@ -1,21 +1,14 @@
 const{fetchAllTasksByProducts,getMyTasks,deleteExistingTask,updateExistingTask,createTasks} = require('./db/tasks.cjs');
 const{createProjects, getProjects} = require('./db/projects.cjs');
 
-const express = require('express');
-const app = express();
-app.use(express.json()); 
-
-app.use(express.static('dist'));
-
 const client = require('./db/client.cjs');
 client.connect();
 
+const express = require('express');
+const app = express();
+app.use(express.json()); 
+app.use(express.static('dist'));
 require('dotenv').config();
-
-// default route to pull the front end
-app.get('/',(res, req, next) => {
-  res.send('dist/index.html')
-}) 
 
 // GET - read projects by users
 app.get('/api/myproject/user/:user_id', async(req, res, next) => {
