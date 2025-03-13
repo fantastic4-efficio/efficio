@@ -6,7 +6,8 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server.cjs",
     "client": "cd client && npm start",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
