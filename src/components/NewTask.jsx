@@ -12,7 +12,7 @@ const NewTask = () => {
   const submitTask = async (event) => {
     event.preventDefault();
 
-    const response = await fetch("API ENDPOINT HERE", {
+    const response = await fetch("http://localhost:5000/api/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

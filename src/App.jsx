@@ -1,38 +1,30 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
-import CalendarPage from "./components/CalendarPage";
 import NewTask from "./components/NewTask";
-import MyAccount from "./components/MyAccount";
-import MyProjects from "./components/MyProjects";
+import Calendar from "./components/CalendarPage";
+import Projects from "./components/MyProjects";
+import Account from "./components/MyAccount";
+import Login from "./components/Login";  
+import Register from "./components/Register";  
 
-const HomePage = () => {
+function App() {
   return (
-    <div className="home-container">
-      <h1>Welcome to Efficio</h1>
-      <p>Manage your projects efficiently.</p>
-      <button className="start-button">
-        <Link to="/dashboard">Let's Start Building</Link>
-      </button>
-    </div>
+      <Router>
+        <Navbar />
+        <Routes>
+          
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/new-task" element={<NewTask />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Login />} />  
+          <Route path="/register" element={<Register />} />  
+        </Routes>
+      </Router>
   );
-};
-const App = () => {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<Dashboard />} /> 
-        <Route path="/calendar" element={<CalendarPage />} /> 
-        <Route path="/new-task" element={<NewTask />} />
-        <Route path="/account" element={<MyAccount />} /> 
-        <Route path="/projects" element={<MyProjects />} /> {/* ✅ Profile Route */}
-      </Routes>
-    </Router>
-  );
-};
-
+}
 
 export default App;
