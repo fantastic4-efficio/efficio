@@ -151,10 +151,6 @@ const syncAndSeed = async () => {
 
 
   console.log('ASSIGNING USER TO CERTAIN TEAM');
-
-  console.log('readTeamId', await readTeamId('Development'));
-  console.log('readUserId', await readUserId('johndoe'));
-
   const assignTeamUser1 = await createTeamUser(await readTeamId('Development'), await readUserId('johndoe'));
   const assignTeamUser2 = await createTeamUser(await readTeamId('Design'),await readUserId('johndoe'));
   console.log('USER ASSIGNED TO TEAM');

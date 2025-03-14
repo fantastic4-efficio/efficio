@@ -1,5 +1,5 @@
 const{fetchAllTasksByProducts,getMyTasks,deleteExistingTask,updateExistingTask,createTasks} = require('./db/tasks.cjs');
-const{createProjects, getProjects} = require('./db/projects.cjs');
+const{createProjects,getProjectsByTeams,getProjectsByUsers} = require('./db/projects.cjs');
 const{createUsers, authenticateUser} = require('./db/users.cjs');
 
 const client = require('./db/client.cjs');
@@ -15,12 +15,30 @@ app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 })
 
-// GET - read projects by users
-app.get('/api/myproject/user/:user_id', async(req, res, next) => {
+
+
+// GET - read projects by Team
+app.get('/api/myproject/teams/:team_id', async(req, res, next) => {
+  const {team_id} = req.params;
+
+  try{
+    const projectByTeam = await getProjectsByTeams(team_id.trim()); // Trim any whitespace
+
+    res.send(projectByTeam);
+
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+// GET - read projects by User
+app.get('/api/myproject/users/:user_id', async(req, res, next) => {
   const {user_id} = req.params;
 
   try{
-    const projectByUser = await getProjects(user_id);
+    const projectByUser = await getProjectsByUsers(user_id.trim()); // Trim any whitespace
 
     res.send(projectByUser);
 
@@ -28,6 +46,7 @@ app.get('/api/myproject/user/:user_id', async(req, res, next) => {
     next(err);
   }
 });
+
 
 
 // GET - read all tasks by projects
@@ -43,6 +62,7 @@ app.get('/api/tasks/tasksbyproject/:project_id', async(req, res, next) => {
     next(err);
   }
 });
+
 
 
 // GET - read all tasks for certain owner
@@ -61,7 +81,7 @@ app.get('/api/tasks/tasksbyowner/:owner_id', async(req, res, next) => {
 
 
 
-// POST - create new user//register !!!!!!
+// POST - create new user//register
 app.post('/api/users/register', async(req, res, next) => {
  try{
   const {firstname, lastname, password, username, email} = req.body;
@@ -74,6 +94,8 @@ app.post('/api/users/register', async(req, res, next) => {
  }
 });
 
+
+
 //POST - Login user
 app.post('/api/users/login', async(req, res, next) => {
   try{
@@ -85,6 +107,8 @@ app.post('/api/users/login', async(req, res, next) => {
     res.send(err.mesage);
   }
 })
+
+
 
 // POST - create new tasks
 app.post('/api/tasks/create-new-tasks', async(req, res, next) => {
@@ -125,6 +149,7 @@ app.delete('/api/tasks/deletetasks/:taskId', async(req, res, next) => {
     next(err);
   }
 });
+
 
 
 //  PATCH - edit an existing task by taskID

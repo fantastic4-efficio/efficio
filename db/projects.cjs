@@ -1,4 +1,7 @@
 const client = require('./client.cjs');
+const { v4: isUUID } = require('uuid'); 
+
+
 const createProjects = async (project_name, description, status, start_date, end_date) => {
   try {
     const { rows } = await client.query(`
@@ -13,14 +16,20 @@ const createProjects = async (project_name, description, status, start_date, end
   }
 }
 
-const getProjects = async (user_id) => {
+
+const getProjectsByTeams = async (team_id) => {
   try {
+   // Validate if team_id is a UUID
+     if (!isUUID(team_id)) {
+       throw new Error(`Invalid UUID format: ${team_id}`);
+     }
+    
     const { rows } = await client.query(`
       SELECT projects.* FROM projects
       JOIN projects_teams ON projects.id = projects_teams.project_id
-      JOIN teams_users ON projects_teams.team_id = teams_users.team_id
-      WHERE teams_users.user_id = $1;
-    `, [user_id]);
+      WHERE projects_teams.team_id = '${team_id}';
+    `);
+
 
     return rows; // Return all projects associated with the user
   } catch (error) {
@@ -28,4 +37,26 @@ const getProjects = async (user_id) => {
   }
 }
 
-module.exports = { createProjects, getProjects };
+
+const getProjectsByUsers = async (user_id) => {
+  try {
+   // Validate if team_id is a UUID
+     if (!isUUID(user_id)) {
+       throw new Error(`Invalid UUID format: ${user_id}`);
+     }
+    
+    const { rows } = await client.query(`
+      SELECT projects.* FROM projects
+      JOIN projects_teams ON projects.id = projects_teams.project_id
+      JOIN teams_users ON projects_teams.team_id = teams_users.team_id
+      WHERE teams_users.user_id = '${user_id}';
+    `);
+
+
+    return rows; // Return all projects associated with the user
+  } catch (error) {
+    console.error(`Get Project Error:`, error);
+  }
+}
+
+module.exports = { createProjects, getProjectsByTeams,getProjectsByUsers};
