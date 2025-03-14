@@ -1,7 +1,7 @@
 const client = require('./client.cjs');
 require('dotenv').config();
 
-const { createTeams } = require('./teams.cjs');
+const { createTeams, createTeamUser, createTeamProject } = require('./teams.cjs');
 const { createProjects } = require('./projects.cjs');
 const { createUsers } = require('./users.cjs');
 const { createTasks } = require('./tasks.cjs');
@@ -148,6 +148,18 @@ const syncAndSeed = async () => {
   // Completed Task
   const task8 = await createTasks(`${user8.id}`, 'Deploy App to Production', 'Make the final release live.',`${project4.id}`, 1, '2025-01-07', '2025-02-08', 'completed', null, null);
   console.log('TASKS CREATED');
+
+
+  console.log('ASSIGNING USER TO CERTAIN TEAM');
+  const assignTeamUser1 = await createTeamUser('4a47716c-489a-423a-8058-8d55b9faccc1','717129d1-685e-46c5-8b50-bce68f32a805');
+  const assignTeamUser2 = await createTeamUser('5d95c59f-9fe5-4653-b653-55e944278536','717129d1-685e-46c5-8b50-bce68f32a805');
+  console.log('USER ASSIGNED TO TEAM');
+
+
+  console.log('ASSIGNING PORJECT TO CERTAIN TEAM');
+  const assignTeamProject1 = await createTeamProject('4a47716c-489a-423a-8058-8d55b9faccc1','717129d1-685e-46c5-8b50-bce68f32a805');
+  const assignTeamProject2 = await createTeamProject('5d95c59f-9fe5-4653-b653-55e944278536','717129d1-685e-46c5-8b50-bce68f32a805');
+  console.log('PROJECT ASSIGNED TO TEAM');
 
 
 
