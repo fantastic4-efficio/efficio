@@ -1,11 +1,11 @@
 const client = require('./client.cjs');
-const createProjects = async (project_name, description, status, start_date, due_date) => {
+const createProjects = async (project_name, description, status, start_date, end_date) => {
   try {
     const { rows } = await client.query(`
-      INSERT INTO projects (project_name, description, status, start_date, due_date)
+      INSERT INTO projects (project_name, description, status, start_date, end_date)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
-      `, [project_name, description, status, start_date, due_date]
+      `, [project_name, description, status, start_date, end_date]
     );
     return rows[0];
   } catch (error) {
