@@ -1,5 +1,6 @@
 const{fetchAllTasksByProducts,getMyTasks,deleteExistingTask,updateExistingTask,createTasks} = require('./db/tasks.cjs');
 const{createProjects, getProjects} = require('./db/projects.cjs');
+const{createUsers, authenticateUser} = require('./db/users.cjs');
 
 const client = require('./db/client.cjs');
 client.connect();
@@ -61,11 +62,29 @@ app.get('/api/tasks/tasksbyowner/:owner_id', async(req, res, next) => {
 
 
 // POST - create new user//register !!!!!!
-app.post('/api/users/register-new-user', async(req, res, next) => {
- console.log('TBD')
+app.post('/api/users/register', async(req, res, next) => {
+ try{
+  const {firstname, lastname, password, username, email} = req.body;
+
+  await createUsers(firstname, lastname, password, username, email);
+  res.send("User Created successfull");
+ } catch (err) {
+  next(err)
+  res.send(err.message);
+ }
 });
 
+//POST - Login user
+app.post('/api/users/login', async(req, res, next) => {
+  try{
+    const {username, password} = req.body;
 
+    const authToken = await authenticateUser(username, password);
+    res.send({token: authToken});
+  } catch(err){
+    res.send(err.mesage);
+  }
+})
 
 // POST - create new tasks
 app.post('/api/tasks/create-new-tasks', async(req, res, next) => {
