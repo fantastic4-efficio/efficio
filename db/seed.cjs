@@ -1,7 +1,7 @@
 const client = require('./client.cjs');
 require('dotenv').config();
 
-const { createTeams } = require('./teams.cjs');
+const { createTeams, createTeamUser, createTeamProject, readUserId, readTeamId, readProjectId } = require('./teams.cjs');
 const { createProjects } = require('./projects.cjs');
 const { createUsers } = require('./users.cjs');
 const { createTasks } = require('./tasks.cjs');
@@ -9,13 +9,13 @@ const { createTasks } = require('./tasks.cjs');
 const dropTables = async () => {
   try {
     await client.query(`
-      DROP TABLE IF EXISTS tasks;
-      DROP TABLE IF EXISTS projects_teams;
-      DROP TABLE IF EXISTS teams_users;
-      DROP TABLE IF EXISTS projects;
-      DROP TABLE IF EXISTS teams;
-      DROP TABLE IF EXISTS users;
-      `);
+      DROP TABLE IF EXISTS tasks CASCADE;
+      DROP TABLE IF EXISTS projects_teams CASCADE;
+      DROP TABLE IF EXISTS teams_users CASCADE;
+      DROP TABLE IF EXISTS projects CASCADE;
+      DROP TABLE IF EXISTS teams CASCADE;
+      DROP TABLE IF EXISTS users CASCADE;
+    `);
   } catch (err) {
     console.log(err);
   }
@@ -63,14 +63,14 @@ const createTables = async() => {
 
       CREATE TABLE teams_users (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        team_id UUID REFERENCES teams(id) NOT NULL,
-        user_id UUID REFERENCES users(id) NOT NULL
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
       );
 
       CREATE TABLE projects_teams (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        project_id UUID REFERENCES projects(id) NOT NULL,
-        team_id UUID REFERENCES teams(id) NOT NULL
+        project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE
       );
       
       `);
@@ -148,6 +148,26 @@ const syncAndSeed = async () => {
   // Completed Task
   const task8 = await createTasks(`${user8.id}`, 'Deploy App to Production', 'Make the final release live.',`${project4.id}`, 1, '2025-01-07', '2025-02-08', 'completed', null, null);
   console.log('TASKS CREATED');
+
+
+  console.log('ASSIGNING USER TO CERTAIN TEAM');
+
+  console.log('readTeamId', await readTeamId('Development'));
+  console.log('readUserId', await readUserId('johndoe'));
+
+  const assignTeamUser1 = await createTeamUser(await readTeamId('Development'), await readUserId('johndoe'));
+  const assignTeamUser2 = await createTeamUser(await readTeamId('Design'),await readUserId('johndoe'));
+  console.log('USER ASSIGNED TO TEAM');
+
+
+  console.log('ASSIGNING PORJECT TO CERTAIN TEAM');
+  const assignTeamProject1 = await createTeamProject(await readTeamId('Design'),await readProjectId('Four Winds'));
+  const assignTeamProject2 = await createTeamProject(await readTeamId('HR'),await readProjectId('Bagel Mania'));
+  const assignTeamProject3 = await createTeamProject(await readTeamId('Finance'),await readProjectId('Tea Time'));
+  const assignTeamProject4 = await createTeamProject(await readTeamId('Development'),await readProjectId('Skyline ERP'));
+  const assignTeamProject5 = await createTeamProject(await readTeamId('Technology'),await readProjectId('Cybersecurity Enhancement'));
+  const assignTeamProject6 = await createTeamProject(await readTeamId('Marketing'),await readProjectId('EdTech Learning Platform'));
+  console.log('PROJECT ASSIGNED TO TEAM');
 
 
 
