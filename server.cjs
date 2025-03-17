@@ -11,7 +11,7 @@ require('dotenv').config();
 app.use('/api', require('./api/index.cjs'));
 
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 })
 
