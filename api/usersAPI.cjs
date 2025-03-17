@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const{createUsers, authenticateUser} = require('../db/users.cjs');
+const{createUsers, authenticateUser, fetchUsersByTeamName} = require('../db/users.cjs');
 
+
+// GET - Get users by team names
+router.get('/usersByTeam/:team_name', async(req, res, next) => {
+  const {team_name} = req.params;
+
+  try{
+    const usersByTeamNames = await fetchUsersByTeamName(team_name);
+    res.send(usersByTeamNames);
+  } catch(err) {
+    next(err);
+  }
+});
 
 
 // POST - create new user//register
