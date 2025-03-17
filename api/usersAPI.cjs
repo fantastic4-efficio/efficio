@@ -8,10 +8,11 @@ const{createUsers, authenticateUser} = require('../db/users.cjs');
 // POST - create new user//register
 router.post('/register', async(req, res, next) => {
   try{
-   const {firstname, lastname, password, username, email} = req.body;
- 
-   await createUsers(firstname, lastname, password, username, email);
-   res.send("User Created successfull");
+   const {first_name, last_name, password, username, email} = req.body;
+  const createdUser = await createUsers(first_name, last_name, password, username, email);
+    if(createdUser) {
+      res.status(201).json({message: "User created successfully!"});
+    }
   } catch (err) {
    next(err)
    res.send(err.message);
