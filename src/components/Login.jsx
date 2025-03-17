@@ -7,14 +7,33 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    
-    if (username.trim() === "" || password.trim() === "") {
-      setError("Please enter both username and password.");
-      return;
-    }
+      if(username.trim() === "" || password.trim() === ""){
+        setError("Please enter both username and password.");
+        return;
+      } else {
+      try{
+      const response = await fetch('/api/users/login', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      });
+      const responseObject = await response.json();
+
+      if(responseObject.token){
+        localStorage.setItem('token', responseObject.token);
+        navigate('/dashboard');
+      }
+    } catch (err){
+    console.log(err);
+  }}
   };
 
   return (
@@ -23,7 +42,7 @@ export default function Login() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleLogin}>
         <input
-          type="text" 
+          type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
