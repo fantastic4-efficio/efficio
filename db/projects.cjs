@@ -59,4 +59,29 @@ const getProjectsByUsers = async (user_id) => {
   }
 }
 
-module.exports = { createProjects, getProjectsByTeams,getProjectsByUsers};
+
+// delete existing project
+const deleteExistingProject = async(project_id) => {
+  try {
+    const { rows: deletedProject } = await client.query(`
+      DELETE FROM projects 
+      WHERE id = $1
+      RETURNING *
+      `, [project_id]);
+
+      if (deletedProject ) {
+        return deletedProject;
+      } else {
+        throw Error({message:`Task not found`});
+      }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+module.exports = { 
+  createProjects, 
+  getProjectsByTeams,
+  getProjectsByUsers, 
+  deleteExistingProject};
