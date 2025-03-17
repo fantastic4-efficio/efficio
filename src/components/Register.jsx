@@ -10,19 +10,20 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate(); 
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // if (!userName || !passWord || !confirmPassword) {
-    //   setError("All fields are required.");
-    //   return;
-    // }
+    if (!userName || !passWord || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
 
-    // if (passWord !== confirmPassword) {
-    //   setError("Passwords do not match.");
-    //   return;
-    // }
+    if (passWord !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     const response = await fetch('/api/users/register', {
       method: "POST",
@@ -38,10 +39,10 @@ const Register = () => {
       })
     });
     const responseObject = await response.json();
-    console.log(responseObject);
+    responseObject ? navigate('/login') : setError("Registration Failed.");
 
-    // setSuccess("Registration successful!"); // Just a message, no authentication or redirection
-    // setError("");
+    setSuccess("Registration successful!"); // Just a message, no authentication or redirection
+    setError("");
   };
 
   return (

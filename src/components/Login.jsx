@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -6,7 +6,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setError("You are already logged in.");
+    }
+  }, [0])
   const handleLogin = async (e) => {
     e.preventDefault();
 
