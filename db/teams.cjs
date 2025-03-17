@@ -100,8 +100,29 @@ const createTeamProject = async(team_id,project_id) => {
       console.log(err);
     }
   }
-  
 
+
+
+  const retrieveTeamsByUsername = async(username) => {
+    try {
+      const { rows: retrievedTeams } = await client.query(`
+        SELECT distinct t.team_name,t.id
+        FROM teams t
+        JOIN teams_users tu ON t.id = tu.team_id
+        JOIN users u ON tu.user_id = u.id
+        WHERE u.username = $1;
+      `,[username]);
+
+      const teamNames = retrievedTeams.map(item => item.team_name);
+
+      return teamNames;
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  
+// need modify
   const assignUserToTeams = async(team_name, username) => {
     try {
       const { rows: assignedUsersToTeams } = await client.query(`
@@ -117,13 +138,35 @@ const createTeamProject = async(team_id,project_id) => {
       console.log(err);
     }
   }
+
+
+  const deleteExistingTeams = async(team_name) => {
+    try {
+      const { rows: deletedTeam } = await client.query(`
+        DELETE FROM teams 
+        WHERE team_name = $1
+        RETURNING *
+        `, [team_name]);
+  
+        if (deletedTeam) {
+          return deletedTeam;
+        } else {
+          throw Error({message:`Team not found`});
+        }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
   
 module.exports = { 
   createTeams,
   createTeamUser,
   createTeamProject,
   fetchAllTeamNames,
+  retrieveTeamsByUsername,
   assignUserToTeams,
+  deleteExistingTeams,
   readUserId,
   readTeamId,
   readProjectId };
