@@ -1,19 +1,32 @@
 const express = require('express');
 const router = express.Router();
 
-const{ fetchAllTeamNames, createTeams, assignUserToTeams } = require('../db/teams.cjs');
+const{ fetchAllTeamNames, createTeams, assignUserToTeams, deleteExistingTeams, retrieveTeamsByUsername } = require('../db/teams.cjs');
 
 
 
-// GET - List All Team names
-router.get('/allTeams', async(req, res, next) => {
-  try{
-    const allTeamNames = await fetchAllTeamNames();
-    res.send(allTeamNames);
-  } catch(err) {
-    next(err);
-  }
-});
+  // GET - List All Team names
+  router.get('/allTeams', async(req, res, next) => {
+    try{
+      const allTeamNames = await fetchAllTeamNames();
+      res.send(allTeamNames);
+    } catch(err) {
+      next(err);
+    }
+  });
+
+
+   // GET - Retrieve teams associated with a specific username
+   router.get('/associtedTeams/:username', async(req, res, next) => {
+    const {username} = req.params;
+
+    try{
+      const associatedTeamNames = await retrieveTeamsByUsername(username);
+      res.send(associatedTeamNames);
+    } catch(err) {
+      next(err);
+    }
+  });
 
 
 
@@ -52,6 +65,27 @@ router.post('/assignUsersToTeams', async(req, res, next) => {
 
     res.status(201).json({message: "User has been assigned to a team successfullt!!!"});
 
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+// DELETE - delete existing teams
+router.delete('/delete-team/:team_name', async(req, res, next) => {
+  const {team_name} = req.params;
+
+  console.log("Deleting Team:", team_name);
+  try{
+
+    const deletedTeam = await deleteExistingTeams(team_name);
+
+    if (!deletedTeam) {
+      return res.status(404).json({error: "Team not found!"});
+    }
+
+    res.status(204).send();
   } catch(err) {
     next(err);
   }

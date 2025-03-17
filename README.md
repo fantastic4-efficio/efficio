@@ -11,7 +11,7 @@
 - Task Management: Create, retrieve, and delete tasks and subtasks.
 - Role-Based Access: Guests MUST log in to use the system.
 
-## API Endpoints
+## API Endpoints Lists
 
 ### Users
 - Get users by team name
@@ -34,7 +34,7 @@
 - Create new projects
 - POST /api/projects/create-new-project
 
-- Delete existing projects
+- Delete existing projects ID
 - DELETE /api/projects/delete-project/:project_id
 
 ### Tasks
@@ -48,7 +48,7 @@
 - Create new tasks
 - POST /api/tasks/create-new-tasks
 
-- Delete existing tasks
+- Delete existing tasks ID
 - DELETE /api/tasks/deletetasks/:taskId
 
 ### Teams
@@ -56,5 +56,11 @@
 - Get all existing Team names
 - GET /api/teams/allTeams
 
+- Retrieve teams associated with a specific user
+- GET /api/teams/associtedTeams/:username
+
 - Create new teams
 - POST /api/teams/create-new-team
+
+- Delete existing teams by team name
+- DELETE /api/teams/delete-team/:team_name
