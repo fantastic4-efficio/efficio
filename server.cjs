@@ -9,6 +9,7 @@ const { fetchAllTasksByProducts, getMyTasks, deleteExistingTask, updateExistingT
 const { createProjects, getProjects } = require('./db/projects.cjs');
 const { createUsers, authenticateUser } = require('./db/users.cjs');
 
+
 const client = require('./db/client.cjs');
 client.connect();
 
@@ -19,6 +20,10 @@ const io = socketIo(server);
 app.use(cors());
 app.use(express.json());
 app.use(express.static('dist'));
+
+
+app.use('/api', require('./api/index.cjs'));
+
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);

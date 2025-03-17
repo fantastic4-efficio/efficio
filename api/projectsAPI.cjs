@@ -1,0 +1,83 @@
+const express = require('express');
+const router = express.Router();
+
+const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject} = require('../db/projects.cjs');
+
+
+// GET - read projects by Team
+router.get('/byteams/:team_id', async(req, res, next) => {
+  const {team_id} = req.params;
+
+  try{
+    const projectByTeam = await getProjectsByTeams(team_id.trim()); // Trim any whitespace
+
+    res.send(projectByTeam);
+
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+// GET - read projects by User
+router.get('/byusers/:user_id', async(req, res, next) => {
+  const {user_id} = req.params;
+
+  try{
+    const projectByUser = await getProjectsByUsers(user_id.trim()); // Trim any whitespace
+
+    res.send(projectByUser);
+
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+// POST - create products
+router.post('/create-new-project', async(req, res, next) => {
+  const {user_id} = req.params;
+
+  try{
+    const{project_name, description, status, start_date, end_date} = req.body;
+
+    if (!project_name || !description || !status || !start_date || !end_date) {
+      return res.status(400).json({error: "All fields are required!"});
+    }
+
+    const newProject = await createProjects(project_name, description, status, start_date, end_date);
+
+    res.status(201).json({message: "Project has been created successfullt!!!", newProject});
+
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+
+// DELETE - delete existing project
+router.delete('/delete-project/:project_id', async(req, res, next) => {
+  const {project_id} = req.params;
+  console.log("Deleting Project:", project_id);
+  try{
+
+    const deletedProject = await deleteExistingProject(project_id);
+
+    if (!deletedProject) {
+      return res.status(404).json({error: "Project not found!"});
+    }
+
+    res.status(204).send();
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+
+module.exports  = router;

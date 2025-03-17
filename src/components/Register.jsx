@@ -1,27 +1,47 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Register() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const Register = () => {
+  const [userName, setUsername] = useState("");
+  const [passWord, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!username || !password || !confirmPassword) {
-      setError("All fields are required.");
-      return;
-    }
+    // if (!userName || !passWord || !confirmPassword) {
+    //   setError("All fields are required.");
+    //   return;
+    // }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+    // if (passWord !== confirmPassword) {
+    //   setError("Passwords do not match.");
+    //   return;
+    // }
 
-    setSuccess("Registration successful!"); // Just a message, no authentication or redirection
-    setError(""); 
+    const response = await fetch('/api/users/register', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        password: passWord,
+        username: userName,
+        email: email
+      })
+    });
+    const responseObject = await response.json();
+    console.log(responseObject);
+
+    // setSuccess("Registration successful!"); // Just a message, no authentication or redirection
+    // setError("");
   };
 
   return (
@@ -30,8 +50,29 @@ export default function Register() {
       <form onSubmit={handleRegister}>
         <input
           type="text"
+          placeholder="First Name"
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Last Name"
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <br />
+        <input
+          type="text"
           placeholder="Username"
-          value={username}
+          value={userName}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
@@ -39,7 +80,7 @@ export default function Register() {
         <input
           type="password"
           placeholder="Password"
-          value={password}
+          value={passWord}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
@@ -58,3 +99,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register
