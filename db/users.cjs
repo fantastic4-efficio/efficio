@@ -61,4 +61,20 @@ const logInWithToken = async (token) => {
   }
 }
 
-module.exports = { createUsers, authenticateUser, logInWithToken };
+
+const fetchUsersByTeamName = async (team_name) => {
+  try {
+    const { rows: usersByTeamNames } = await client.query(`
+      SELECT distinct users.username
+      FROM users
+      JOIN teams_users ON users.id = teams_users.user_id
+      JOIN teams ON teams_users.team_id = teams.id
+      WHERE teams.team_name = $1;
+    `,[team_name]);
+    return usersByTeamNames
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { createUsers, authenticateUser, logInWithToken, fetchUsersByTeamName };

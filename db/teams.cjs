@@ -87,6 +87,43 @@ const createTeamProject = async(team_id,project_id) => {
       console.log(err);
     }
   }
+
+
+  const fetchAllTeamNames = async() => {
+    try {
+      const { rows: retrievedTeams } = await client.query(`
+        SELECT team_name FROM teams;
+      `);
   
+      return retrievedTeams;
+    } catch(err) {
+      console.log(err);
+    }
+  }
   
-module.exports = { createTeams,createTeamUser,createTeamProject,readUserId,readTeamId,readProjectId };
+
+  const assignUserToTeams = async(team_name, username) => {
+    try {
+      const { rows: assignedUsersToTeams } = await client.query(`
+       INSERT INTO teams_users (team_id, user_id)
+        VALUES (
+          (SELECT id FROM teams WHERE team_name = $1),
+          (SELECT id FROM users WHERE username = $2)
+        );
+      `,[team_name, username]);
+  
+      return assignedUsersToTeams;
+    } catch(err) {
+      console.log(err);
+    }
+  }
+  
+module.exports = { 
+  createTeams,
+  createTeamUser,
+  createTeamProject,
+  fetchAllTeamNames,
+  assignUserToTeams,
+  readUserId,
+  readTeamId,
+  readProjectId };
