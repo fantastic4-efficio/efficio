@@ -11,9 +11,14 @@ router.get('/byteams/:team_id', async(req, res, next) => {
   try{
     const projectByTeam = await getProjectsByTeams(team_id.trim()); // Trim any whitespace
 
-    res.send(projectByTeam);
+    if (!projectByTeam || projectByTeam.length === 0) {
+      return res.status(404).json({error: "No project found for this team!"});
+    }
+
+    res.json(projectByTeam);
 
   } catch(err) {
+    console.error('error in /byteams:', err);
     next(err);
   }
 });
@@ -27,7 +32,11 @@ router.get('/byusers/:user_id', async(req, res, next) => {
   try{
     const projectByUser = await getProjectsByUsers(user_id.trim()); // Trim any whitespace
 
-    res.send(projectByUser);
+
+    if (!projectByUser || projectByUser.length === 0) {
+      return res.status(404).json({error: "No project found for this user!"});
+    }
+    res.json(projectByUser);
 
   } catch(err) {
     next(err);
@@ -38,7 +47,7 @@ router.get('/byusers/:user_id', async(req, res, next) => {
 
 // POST - create products
 router.post('/create-new-project', async(req, res, next) => {
-  const {user_id} = req.params;
+  // const {user_id} = req.params;
 
   try{
     const{project_name, description, status, start_date, end_date} = req.body;
