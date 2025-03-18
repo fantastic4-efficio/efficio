@@ -8,13 +8,14 @@ import Account from "./components/MyAccount";
 import Login from "./components/Login";  
 import Register from "./components/Register";  
 import MyProjects from "./components/MyProjects";
+import Homepage from "./components/Homepage";
 
 function App() {
   return (
       <Router>
         <Navbar />
         <Routes>
-          
+          <Route path="/" element={<Homepage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-task" element={<NewTask />} />
           <Route path="/calendar" element={<Calendar />} />
