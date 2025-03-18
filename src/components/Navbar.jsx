@@ -3,16 +3,6 @@ import { Link, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import "./Navbar.css";
 
-const HomePage = () => {
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Welcome to Efficio! 📝 </h1>
-      
-      
-    </div>
-  );
-};
-
 const Navbar = () => {
   return (
     <>
@@ -51,11 +41,6 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
-
-      
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
     </>
   );
 };
