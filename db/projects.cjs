@@ -27,7 +27,7 @@ const getProjectsByTeams = async (team_id) => {
     const { rows } = await client.query(`
       SELECT projects.* FROM projects
       JOIN projects_teams ON projects.id = projects_teams.project_id
-      WHERE projects_teams.team_id = 1;
+      WHERE projects_teams.team_id = $1;
     `, [team_id]);
 
 

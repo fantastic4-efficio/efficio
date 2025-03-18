@@ -10,12 +10,6 @@ const { error } = require('node:console');
 
 const server = createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000", // Adjust this if your frontend runs on a different port
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
-  },
   path: '/socket.io'
 });
 
