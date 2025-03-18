@@ -72,7 +72,7 @@ const deleteExistingTask = async(taskId) => {
 }
 
 
-// PATCH - need modify
+// PATCH
 const updateExistingTask = async (taskId, updates) => {
   try {
     if (!Object.keys(updates).length) {

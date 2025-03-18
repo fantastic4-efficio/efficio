@@ -13,6 +13,7 @@
 
 ## API Endpoints Lists
 
+
 ### Users
 - Get users by team name
 - GET /api/users/usersByTeam/:team_name
@@ -22,6 +23,7 @@
 
 - Log in
 - POST /api/users/login
+
 
 ### Projects
 
@@ -37,6 +39,7 @@
 - Delete existing projects ID
 - DELETE /api/projects/delete-project/:project_id
 
+
 ### Tasks
 
 - Read all tasks by project
@@ -50,6 +53,10 @@
 
 - Delete existing tasks ID
 - DELETE /api/tasks/deletetasks/:taskId
+
+- Update existing tasks by task_id
+- PATCH /api/tasks/update/:taskId
+
 
 ### Teams
 
