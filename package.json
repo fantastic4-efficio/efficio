@@ -7,7 +7,7 @@
     "server": "nodemon server.cjs",
     "client": "cd client && npm start",
     "dev": "vite",
-    "build": "webpack --config webpack.config.js && vite build"
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
