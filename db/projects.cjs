@@ -1,5 +1,5 @@
 const client = require('./client.cjs');
-const { v4: isUUID } = require('uuid'); 
+const { v4: isUUID } = require('uuid');
 
 
 const createProjects = async (project_name, description, status, start_date, end_date) => {
@@ -27,8 +27,8 @@ const getProjectsByTeams = async (team_id) => {
     const { rows } = await client.query(`
       SELECT projects.* FROM projects
       JOIN projects_teams ON projects.id = projects_teams.project_id
-      WHERE projects_teams.team_id = '${team_id}';
-    `);
+      WHERE projects_teams.team_id = 1;
+    `, [team_id]);
 
 
     return rows; // Return all projects associated with the user

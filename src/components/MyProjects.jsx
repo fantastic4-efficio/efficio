@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./MyProjects.css"; // Ensure CSS file exists
-import ChatBox from "../ChatBox";
+import ChatBox from "./ChatBox";
 import { useEffect } from "react";
 
 const MyProjects = () => {
@@ -11,19 +11,25 @@ const MyProjects = () => {
   const [dueDate, setDueDate] = useState("");
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('/projects');
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     try {
+  //       const response = await fetch('/projects');
+        
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  
+  //       const data = await response.json();
+  //       console.log('Fetched projects:', data); // Log the fetched data
+  //       setProjects(data);
+  //     } catch (error) {
+  //       console.error('Error fetching projects:', error.message);
+  //     }
+  //   };
+  
+  //   fetchProjects();
+  // }, []);
 
   const handleCreate = async () => {
     const newProject = { projectName, status, chat, dueDate, description };
