@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGri
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
+import ChatBox from "./ChatBox";
 
 // Sample data for Pie and Bar Charts
 const pieData = [
@@ -24,7 +25,7 @@ const Dashboard = () => {
   const username = "johndoe";
   const [myTasks, setMyTasks] = useState([]);
   const [tasksPecentage, setTasksPercentage] = useState([]);
-
+  const [chat, setChat] = useState("");
 useEffect(() => {
   const fetchTasks = async() => {
     try{
@@ -97,7 +98,7 @@ console.log('tasksPecentage:', tasksPecentage);
 
       <div className="chat-section">
         <h3>Project Chat</h3>
-        {/* Chat Component Placeholder */}
+        <ChatBox chat={chat} setChat={setChat} />
       </div>
 
       <div className="tasks-section">

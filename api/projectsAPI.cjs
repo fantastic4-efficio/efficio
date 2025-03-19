@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject, getAllProjects} = require('../db/projects.cjs');
 
-const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject} = require('../db/projects.cjs');
+
+// GET - read all projects
+router.get('/projects', async(req, res, next) => {
+  try{
+    const allProjects = await getAllProjects();
+
+    if (!allProjects || allProjects.length === 0) {
+      return res.status(404).json({error: "No projects found!"});
+    }
+
+    res.json(allProjects);
+
+  } catch(err) {
+    console.error('Error in /projects:', err);
+    next(err);
+  }
+});
 
 
 // GET - read projects by Team

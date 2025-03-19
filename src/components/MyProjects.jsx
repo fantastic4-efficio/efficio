@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./MyProjects.css"; // Ensure CSS file exists
 import ChatBox from "./ChatBox";
-import { useEffect } from "react";
 
 const MyProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -11,25 +10,8 @@ const MyProjects = () => {
   const [dueDate, setDueDate] = useState("");
   const [description, setDescription] = useState("");
 
-  // useEffect(() => {
-  //   const fetchProjects = async () => {
-  //     try {
-  //       const response = await fetch('/projects');
-        
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  
-  //       const data = await response.json();
-  //       console.log('Fetched projects:', data); // Log the fetched data
-  //       setProjects(data);
-  //     } catch (error) {
-  //       console.error('Error fetching projects:', error.message);
-  //     }
-  //   };
-  
-  //   fetchProjects();
-  // }, []);
+
+  const token = localStorage.getItem("token");
 
   const handleCreate = async () => {
     const newProject = { projectName, status, chat, dueDate, description };
@@ -38,6 +20,7 @@ const MyProjects = () => {
       const response = await fetch('/projects', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newProject),
@@ -56,17 +39,25 @@ const MyProjects = () => {
   };
 
   const handleDelete = async (projectId) => {
+    if (!projectId) return;
+
     try {
-      const response = await fetch(`/projects/${projectId}`, { method: 'DELETE' });
+      const response = await fetch(`/projects/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
-        console.log('Project Deleted');
-        setProjects((prevProjects) => prevProjects.filter(project => project.id !== projectId));
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.id !== projectId)
+        );
       } else {
-        console.error('Failed to delete project');
+        console.error("Failed to delete project");
       }
     } catch (error) {
-      console.error('Error deleting project:', error);
+      console.error("Error deleting project:" + error);
     }
   };
 
@@ -78,7 +69,7 @@ const MyProjects = () => {
         <input type="text" placeholder="Status (%)" value={status} onChange={(e) => setStatus(e.target.value)} />
         <input type="date" placeholder="Project Due" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
         <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
-        <ChatBox />
+        <ChatBox chat={chat} setChat={setChat} />
 
         <div className="button-group">
           <button onClick={handleCreate}>Create</button>

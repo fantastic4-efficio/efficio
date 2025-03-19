@@ -1,31 +1,38 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-
+const token = localStorage.getItem("token");
 
 const ChatBox = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    const socketURL = window.location.hostname === "localhost" 
+      ? "http://localhost:3000" 
+      : "https://efficio-kftq.onrender.com";
 
-    const socket = io("http://localhost:3000", {
-      transports: ['websocket'],
+    const socketInstance = io(socketURL, {
+      auth: { token },
+      withCredentials: true,
     });
 
+    setSocket(socketInstance);
 
-    socket.on("newMessage", (receivedMessage) => {
+    socketInstance.on("newMessage", (receivedMessage) => {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
     });
 
     return () => {
-      socket.off("newMessage");
+      socketInstance.off("newMessage");
+      socketInstance.disconnect();
     };
   }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
-    if (input.trim()) {
+    if (input.trim() && socket) {
       socket.emit("newMessage", input);
       setInput("");
     }
