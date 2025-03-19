@@ -36,21 +36,21 @@ const fetchAllTasksByProducts = async(project_id) => {
   }
 
   
-// read certain owners' task - renderw with owner/user_id
-const getMyTasks= async(owner_id) => {
-   try { 
-    const { rows: allTasksByOwner} = await client.query(`
-     SELECT * FROM tasks 
-     WHERE owner = $1
-   `,[owner_id]);
+// read certain owners' task - render with username
+const getMyTasks= async(usernmae) => {
+  try { 
+   const { rows: allTasksByOwner} = await client.query(`
+    SELECT * FROM tasks t
+    JOIN users u ON t.owner = u.id
+    WHERE username = $1
+  `,[usernmae]);
 
-     return allTasksByOwner;
+    return allTasksByOwner;
 
-  } catch (err) {
-     console.log(err);
-  }
+ } catch (err) {
+    console.log(err);
+ }
 }
-
 
 // delete existing task
 const deleteExistingTask = async(taskId) => {
