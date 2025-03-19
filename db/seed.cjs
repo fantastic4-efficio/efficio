@@ -5,6 +5,7 @@ const { createTeams, createTeamUser, createTeamProject, readUserId, readTeamId, 
 const { createProjects } = require('./projects.cjs');
 const { createUsers } = require('./users.cjs');
 const { createTasks } = require('./tasks.cjs');
+const { createMessages } = require('./message.cjs');
 
 const dropTables = async () => {
   try {
@@ -132,8 +133,6 @@ const syncAndSeed = async () => {
   const user13 = await createUsers(`Alice`, `Johnson`, `alicepass123`, `alicej`, `alicej@example.com`);  
   const user14 = await createUsers(`Bob`, `Smith`, `bobsecure456`, `bobs`, `bobs@example.com`);  
   const user15 = await createUsers(`Charlie`, `Brown`, `charliepass789`, `charlieb`, `charlieb@example.com`);  
-   
-
   console.log('USERS CREATED');
 
 
@@ -145,41 +144,40 @@ const syncAndSeed = async () => {
   const project5 = await createProjects(`Cybersecurity Enhancement`, `Improving security protocols and infrastructure`, `in-progress`, `2025-02-01`, `2025-05-15`);
   const project6 = await createProjects(`EdTech Learning Platform`, `Creating an interactive education platform with AI`, `paused`, `2025-05-01`, `2025-11-01`);
   const project7 = await createProjects(`Smart Home Automation`, `Developing an integrated platform for home automation and IoT devices`, `in-progress`, `2025-06-01`, `2025-12-01`);
-
   console.log('PROJECTS CREATED');
 
 
   console.log('CREATING TASKS');
-  //Normal task 1
-  const task1 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
-  // Normal task 2
-  const task2 = await createTasks(`${user2.id}`, 'Write Documentation', 'Prepare user guides and API docs.',`${project2.id}`, 3, '2025-03-01', '2025-06-10', 'in-progress', null, null);
-  // Normal task 3
-  const task3 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
-  // Normal task 4
-  const task4 = await createTasks(`${user1.id}`,'Implement User Authentication','Set up user login system using JWT and bcrypt.',`${project1.id}`,3,'2025-02-01','2025-04-20','in-progress',null,null);
-  // Normal task 5
-  const task5 = await createTasks(`${user9.id}`,'Create Database Schema','Design tables and relationships for user data and tasks.',`${project1.id}`,5,'2025-02-10','2025-04-30','in-progress',null,null);
-  // High-priority urgent task
-  const task6 = await createTasks(`${user3.id}`, 'Fix Production Bug', 'Critical issue causing downtime.',`${project2.id}`, 5, '2025-02-10', '2025-04-01', 'in-progress', null, null);
-  // Task with parent 1
-  const task7 = await createTasks(`${user4.id}`, 'Database Optimization', 'Improve query performance and indexing.', `${project3.id}`, 3, '2025-03-03', '2025-03-31', 'in-progress',`${task2.id}`, null);
-  // Task with parent 2
-  const task8 = await createTasks(`${user1.id}`,'Deploy Application','Prepare the app for deployment on AWS and set up CI/CD pipelines.',`${project1.id}`,4,'2025-03-10','2025-06-01','in-progress',null,null);
-  // Parent task with subtask
-  const task9 = await createTasks(`${user5.id}`, 'Develop Authentication System', 'Create user authentication using JWT.',`${project3.id}`, 2, '2025-02-04', '2025-04-20', 'in-progress', null, `${task3.id}`);
-  // Subtask of the above parent task
-  const task10 = await createTasks(`${user6.id}`, 'Build Login API', 'Develop API for login and authentication.',`${project5.id}`, 1, '2025-03-05', '2025-03-29', 'in-progress', `${task3.id}`, null);
-  // Paused task 1
-  const task11 = await createTasks(`${user7.id}`, 'Complete UI Testing', 'Ensure UI is bug-free and responsive.',`${project6.id}`, 0, '2025-02-20', '2025-03-05', 'paused', null, null);
-  // Paused task 2
-  const task12 = await createTasks(`${user1.id}`,'Develop Frontend Interface','Build React components for the task management dashboard.',`${project1.id}`,4,'2025-02-15','2025-03-01','paused',null,null);
-  // Completed Task 1
-  const task13 = await createTasks(`${user8.id}`, 'Deploy App to Production', 'Make the final release live.',`${project4.id}`, 1, '2025-01-07', '2025-02-08', 'completed', null, null);
-  // Completed Task 2
-  const task14 = await createTasks(`${user1.id}`,'API Integration','Connect the frontend to the backend API for task management.',`${project1.id}`,3,'2025-03-01','2025-05-05','completed',null,null);
-   // Completed Task 3
-  const task15 = await createTasks(`${user1.id}`,'Set Up Testing Environment','Configure Jest and Cypress for unit and end-to-end tests.',`${project1.id}`,2,'2025-03-05','2025-05-10','completed',null,null);
+ //Normal task 1
+ const task1 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
+ // Normal task 2
+ const task2 = await createTasks(`${user2.id}`, 'Write Documentation', 'Prepare user guides and API docs.',`${project2.id}`, 3, '2025-03-01', '2025-06-10', 'in-progress', null, null);
+ // Normal task 3
+ const task3 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
+ // Normal task 4
+ const task4 = await createTasks(`${user1.id}`,'Implement User Authentication','Set up user login system using JWT and bcrypt.',`${project1.id}`,3,'2025-02-01','2025-04-20','in-progress',null,null);
+ // Normal task 5
+ const task5 = await createTasks(`${user9.id}`,'Create Database Schema','Design tables and relationships for user data and tasks.',`${project1.id}`,5,'2025-02-10','2025-04-30','in-progress',null,null);
+ // High-priority urgent task
+ const task6 = await createTasks(`${user3.id}`, 'Fix Production Bug', 'Critical issue causing downtime.',`${project2.id}`, 5, '2025-02-10', '2025-04-01', 'in-progress', null, null);
+ // Task with parent 1
+ const task7 = await createTasks(`${user4.id}`, 'Database Optimization', 'Improve query performance and indexing.', `${project3.id}`, 3, '2025-03-03', '2025-03-31', 'in-progress',`${task2.id}`, null);
+ // Task with parent 2
+ const task8 = await createTasks(`${user1.id}`,'Deploy Application','Prepare the app for deployment on AWS and set up CI/CD pipelines.',`${project1.id}`,4,'2025-03-10','2025-06-01','in-progress',null,null);
+ // Parent task with subtask
+ const task9 = await createTasks(`${user5.id}`, 'Develop Authentication System', 'Create user authentication using JWT.',`${project3.id}`, 2, '2025-02-04', '2025-04-20', 'in-progress', null, `${task3.id}`);
+ // Subtask of the above parent task
+ const task10 = await createTasks(`${user6.id}`, 'Build Login API', 'Develop API for login and authentication.',`${project5.id}`, 1, '2025-03-05', '2025-03-29', 'in-progress', `${task3.id}`, null);
+ // Paused task 1
+ const task11 = await createTasks(`${user7.id}`, 'Complete UI Testing', 'Ensure UI is bug-free and responsive.',`${project6.id}`, 0, '2025-02-20', '2025-03-05', 'paused', null, null);
+ // Paused task 2
+ const task12 = await createTasks(`${user1.id}`,'Develop Frontend Interface','Build React components for the task management dashboard.',`${project1.id}`,4,'2025-02-15','2025-03-01','paused',null,null);
+ // Completed Task 1
+ const task13 = await createTasks(`${user8.id}`, 'Deploy App to Production', 'Make the final release live.',`${project4.id}`, 1, '2025-01-07', '2025-02-08', 'completed', null, null);
+ // Completed Task 2
+ const task14 = await createTasks(`${user1.id}`,'API Integration','Connect the frontend to the backend API for task management.',`${project1.id}`,3,'2025-03-01','2025-05-05','completed',null,null);
+  // Completed Task 3
+ const task15 = await createTasks(`${user1.id}`,'Set Up Testing Environment','Configure Jest and Cypress for unit and end-to-end tests.',`${project1.id}`,2,'2025-03-05','2025-05-10','completed',null,null);
   console.log('TASKS CREATED');
 
 
@@ -202,8 +200,6 @@ const syncAndSeed = async () => {
   const assignTeamUser14 = await createTeamUser(await readTeamId('Marketing'), await readUserId('sophiam'));
   const assignTeamUser15 = await createTeamUser(await readTeamId('Marketing'), await readUserId('mikejohnson'));
   const assignTeamUser16 = await createTeamUser(await readTeamId('Finance'), await readUserId('danbrown'));
-
-
   console.log('USER ASSIGNED TO TEAM');
 
 

@@ -1,6 +1,5 @@
 const client = require('./db/client.cjs');
 client.connect();
-
 require('dotenv').config();
 
 const cors = require('cors');
