@@ -12,7 +12,7 @@ const { Server } = require('socket.io');
 
 
 app.use(cors({
-  origin: ["https://efficio-kftq.onrender.com"],
+  origin: ["https://efficio-kftq.onrender.com", "http://localhost:5173"],
   methods: ["GET", "POST", "DELETE", "PATCH"],
   credentials: true
 }));
