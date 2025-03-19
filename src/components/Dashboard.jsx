@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
+import { PieChart, Pie, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
@@ -131,7 +131,7 @@ console.log('tasksPecentage:', tasksPercentage);
 
       <div className="chat-section">
         <h3>Project Chat</h3>
-        <ChatBox chat={chat} setChat={setChat} />
+        {/* <ChatBox chat={chat} setChat={setChat} /> */}
       </div>
 
       <div className="tasks-section">
