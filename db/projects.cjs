@@ -60,6 +60,26 @@ const getProjectsByUsers = async (user_id) => {
 }
 
 
+const getProjectsByUsername = async (username) => {
+    try { 
+      const { rows: allProjectsByUsernames} = await client.query(`
+      SELECT DISTINCT p.*
+      FROM projects p
+      JOIN projects_teams pt ON p.id = pt.project_id
+      JOIN teams t ON pt.team_id = t.id
+      JOIN teams_users tu ON t.id = tu.team_id
+      JOIN users u ON tu.user_id = u.id
+      WHERE u.username = $1;
+`,[username]);
+  
+       return allProjectsByUsernames;
+  
+    } catch (err) {
+       console.log(err);
+    }
+}
+
+
 // delete existing project
 const deleteExistingProject = async(project_id) => {
   try {
@@ -84,4 +104,5 @@ module.exports = {
   createProjects, 
   getProjectsByTeams,
   getProjectsByUsers, 
+  getProjectsByUsername,
   deleteExistingProject};
