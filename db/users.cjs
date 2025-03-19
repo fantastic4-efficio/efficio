@@ -24,11 +24,15 @@ const authenticateUser = async (username, password) => {
       WHERE username= $1;
     `, [username]);
 
+      console.log(rows[0]);
     const user = rows[0];
     if (user) {
+      console.log(user);
       const isPasswordMatch = await bcrypt.compare(password, user.password);
+      console.log(isPasswordMatch);
       if (isPasswordMatch) {
-        const token = await jwt.sign({ username: user.username }, process.env.JWT_SECRET);
+        const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET);
+        console.log(token);
         return token;
       } else {
         throw new Error('No User Found');
