@@ -1,5 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
 
 // Sample data for Pie and Bar Charts
@@ -15,7 +17,68 @@ const barData = [
 
 const COLORS = ["#00C49F", "#FF8042"]; // Custom colors for pie chart
 
+
 const Dashboard = () => {
+
+  // const {username} = useParams();
+  const username = "johndoe";
+  const [myTasks, setMyTasks] = useState([]);
+  const [tasksPecentage, setTasksPercentage] = useState([]);
+
+useEffect(() => {
+  const fetchTasks = async() => {
+    try{
+      const response = await fetch(`http://localhost:3000/api/tasks/byowner/${username}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+          "Content-Type": "application/json"
+        }
+      });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const taskArray = await response.json();
+    console.log("taskArray: ", taskArray);
+    setMyTasks(taskArray);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+  }}
+
+  fetchTasks();
+}, []);
+
+console.log('myTasks:', myTasks);
+
+useEffect(() => {
+    const fetchTasksPercentage = async() => {
+      try{
+      const response = await fetch(`http://localhost:3000/api/tasks/percentagebyowner/${username}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+          "Content-Type": "application/json"
+        }
+      });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+      const percentageArray = await response.json();
+      console.log('percentageArray: ', percentageArray);
+      setTasksPercentage(percentageArray);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }}
+
+  fetchTasksPercentage();
+}, []);
+
+console.log('tasksPecentage:', tasksPecentage);
+
   return (
     <div className="dashboard-container">
       <div className="projects-section">

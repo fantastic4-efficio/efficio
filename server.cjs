@@ -5,9 +5,11 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const app = express();
+
 const apiRouter = require('./api/index.cjs');
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
+
 
 app.use(cors({
   origin: ["https://efficio-kftq.onrender.com"],
@@ -15,10 +17,14 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json()); 
+
+app.use(express.json());
 app.use(express.static('dist'));
 
+
 const server = createServer(app);
+
+
 const io = new Server(server, {
   path: '/socket.io',
   cors: {
@@ -27,7 +33,9 @@ const io = new Server(server, {
   }
 });
 
+
 app.use('/api', apiRouter);
+
 
 app.use((req, res, next) => {
   if (!req.user) {
@@ -36,13 +44,14 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.get('/*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 });
 
+
 io.on('connection', (socket) => {
   console.log('a user connected');
-
   socket.on('newMessage', (newMessage) => {
     io.emit('newMessage', newMessage);
   });
@@ -51,6 +60,7 @@ io.on('connection', (socket) => {
     console.log('a user disconnected');
   });
 });
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

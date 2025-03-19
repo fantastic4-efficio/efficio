@@ -17,7 +17,6 @@ const dropTables = async () => {
       DROP TABLE IF EXISTS teams CASCADE;
       DROP TABLE IF EXISTS users CASCADE;
       DROP TABLE IF EXISTS messages CASCADE;
-
     `);
   } catch (err) {
     console.log(err);
@@ -38,7 +37,8 @@ const createTables = async() => {
         last_name VARCHAR(30) NOT NULL,
         username VARCHAR(120) UNIQUE NOT NULL,
         password VARCHAR(60) NOT NULL,
-        email VARCHAR(150) UNIQUE NOT NULL
+        email VARCHAR(150) UNIQUE NOT NULL,
+        user_avatar TEXT
       );
 
       CREATE TABLE projects (
@@ -132,7 +132,7 @@ const syncAndSeed = async () => {
   const user12 = await createUsers(`Mia`, `Clark`, `112233pass`, `miac`, `miac@example.com`);
   const user13 = await createUsers(`Alice`, `Johnson`, `alicepass123`, `alicej`, `alicej@example.com`);  
   const user14 = await createUsers(`Bob`, `Smith`, `bobsecure456`, `bobs`, `bobs@example.com`);  
-  const user15 = await createUsers(`Charlie`, `Brown`, `charliepass789`, `charlieb`, `charlieb@example.com`);
+  const user15 = await createUsers(`Charlie`, `Brown`, `charliepass789`, `charlieb`, `charlieb@example.com`);  
   console.log('USERS CREATED');
 
 
@@ -179,6 +179,8 @@ const syncAndSeed = async () => {
   // Completed Task 3
  const task15 = await createTasks(`${user1.id}`,'Set Up Testing Environment','Configure Jest and Cypress for unit and end-to-end tests.',`${project1.id}`,2,'2025-03-05','2025-05-10','completed',null,null);
   console.log('TASKS CREATED');
+
+
 
 
   console.log('ASSIGNING USER TO CERTAIN TEAM');
