@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGri
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
+import ChatBox from "./ChatBox";
 
 
 
@@ -37,6 +38,9 @@ const Dashboard = () => {
   } catch (error) {
     console.error("Error fetching projects:", error);
   }}
+
+
+  
   const fetchTasks = async() => {
     try{
       const response = await fetch(`http://localhost:3000/api/tasks/byowner/${username}`, {
@@ -57,6 +61,8 @@ const Dashboard = () => {
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }}
+
+
   const fetchTasksPercentage = async() => {
     try{
     const response = await fetch(`http://localhost:3000/api/tasks/percentagebyowner/${username}`, {
@@ -125,7 +131,7 @@ console.log('tasksPecentage:', tasksPercentage);
 
       <div className="chat-section">
         <h3>Project Chat</h3>
-        {/* Chat Component Placeholder */}
+        <ChatBox chat={chat} setChat={setChat} />
       </div>
 
       <div className="tasks-section">

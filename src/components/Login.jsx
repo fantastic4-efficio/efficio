@@ -10,9 +10,10 @@ export default function Login() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setError("You are already logged in.");
+      navigate('/dashboard');
     }
-  }, [0])
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -34,7 +35,9 @@ export default function Login() {
       const responseObject = await response.json();
       console.log(responseObject);
 
-      if(responseObject.token){
+      if(!response.ok){
+        setError(responseObject.error || "Login Failed, Please try again.");
+      } else if(responseObject.token){
         localStorage.setItem('token', responseObject.token);
         navigate('/dashboard');
       }

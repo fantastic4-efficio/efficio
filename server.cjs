@@ -12,7 +12,7 @@ const { Server } = require('socket.io');
 
 
 app.use(cors({
-  origin: ["https://efficio-kftq.onrender.com", "http://localhost:5173"],
+  origin: ["https://efficio-kftq.onrender.com", "http://localhost:5173", "http://localhost:3000"],
   methods: ["GET", "POST", "DELETE", "PATCH"],
   credentials: true
 }));
@@ -28,21 +28,13 @@ const server = createServer(app);
 const io = new Server(server, {
   path: '/socket.io',
   cors: {
-    origin: "https://efficio-kftq.onrender.com",
+    origin: ["http://localhost:3000", "https://efficio-kftq.onrender.com"],
     methods: ["GET", "POST", "DELETE", "PATCH"]
   }
 });
 
 
 app.use('/api', apiRouter);
-
-
-app.use((req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-});
 
 
 app.get('/*', (req, res) => {
@@ -52,6 +44,13 @@ app.get('/*', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return socket.disconnect(true);
+  }
+ console.log("user connected with token", token);
+
   socket.on('newMessage', (newMessage) => {
     io.emit('newMessage', newMessage);
   });

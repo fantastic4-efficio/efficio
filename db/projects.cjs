@@ -16,6 +16,18 @@ const createProjects = async (project_name, description, status, start_date, end
   }
 }
 
+const getAllProjects = async () => {
+  try {
+    const { rows } = await client.query(`
+      SELECT * FROM projects;
+    `);
+    return rows;
+  } catch (error) {
+    console.error('Error fetching all projects:', error);
+    throw new Error('Failed to retrieve projects');
+  }
+};
+
 
 const getProjectsByTeams = async (team_id) => {
   try {
