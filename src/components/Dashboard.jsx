@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
 
-// Sample data for Pie and Bar Charts
-const pieData = [
-  { name: "Completed Tasks", value: 70 },
-  {name : "test2", value: 15},
-  { name: "Pending Tasks", value: 25 },
-];
 
-const barData = [
-  { name: "Completed", tasks: 70 },
-  { name: "Test", tasks: 10},
-  { name: "Pending", tasks: 20 },
-];
 
 const COLORS = ["#00C49F", "#FF8042", "#FFBB28"];// Custom colors for pie chart
 
