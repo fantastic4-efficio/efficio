@@ -30,6 +30,9 @@
 - Get project info by user
 - GET /api/projects/byusers/:user_id
 
+- Get project info by username
+- GET /api/projects/byusername/:username
+
 - Get project info by team
 - GET /api/projects/byteams/:team_id
 

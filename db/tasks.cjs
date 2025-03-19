@@ -37,13 +37,13 @@ const fetchAllTasksByProducts = async(project_id) => {
 
   
 // read certain owners' task - render with username
-const getMyTasks= async(usernmae) => {
+const getMyTasks= async(username) => {
    try { 
     const { rows: allTasksByOwner} = await client.query(`
      SELECT * FROM tasks t
      JOIN users u ON t.owner = u.id
      WHERE username = $1
-   `,[usernmae]);
+   `,[username]);
 
      return allTasksByOwner;
 
@@ -61,15 +61,15 @@ const getMyTasksPercentage = async(username) => {
     u.username,
     ROUND(
         (COUNT(CASE WHEN t.status = 'in-progress' THEN 1 END) * 100.0) / COUNT(*),
-        2
+        1
     ) AS in_progress_percentage,
     ROUND(
         (COUNT(CASE WHEN t.status = 'paused' THEN 1 END) * 100.0) / COUNT(*),
-        2
+        1
     ) AS paused_percentage,
     ROUND(
         (COUNT(CASE WHEN t.status = 'completed' THEN 1 END) * 100.0) / COUNT(*),
-        2
+        1
     ) AS completed_percentage
   FROM 
       tasks t

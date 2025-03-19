@@ -1,24 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject, getAllProjects} = require('../db/projects.cjs');
+const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject} = require('../db/projects.cjs');
 
-
-// GET - read all projects
-router.get('/projects', async(req, res, next) => {
-  try{
-    const allProjects = await getAllProjects();
-
-    if (!allProjects || allProjects.length === 0) {
-      return res.status(404).json({error: "No projects found!"});
-    }
-
-    res.json(allProjects);
-
-  } catch(err) {
-    console.error('Error in /projects:', err);
-    next(err);
-  }
-});
 
 
 // GET - read projects by Team
@@ -54,6 +37,22 @@ router.get('/byusers/:user_id', async(req, res, next) => {
       return res.status(404).json({error: "No project found for this user!"});
     }
     res.json(projectByUser);
+
+  } catch(err) {
+    next(err);
+  }
+});
+
+
+
+// GET - mydashboard - read all project for certain username
+router.get('/byusername/:username', async(req, res, next) => {
+  const {username} = req.params;
+
+  try{
+    const allProjectsByUsername = await getProjectsByUsername(username);
+
+    res.send(allProjectsByUsername);
 
   } catch(err) {
     next(err);
