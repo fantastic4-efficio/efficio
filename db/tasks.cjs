@@ -36,13 +36,14 @@ const fetchAllTasksByProducts = async(project_id) => {
   }
 
   
-// read certain owners' task - renderw with owner/user_id
-const getMyTasks= async(owner_id) => {
+// read certain owners' task - render with username
+const getMyTasks= async(usernmae) => {
    try { 
     const { rows: allTasksByOwner} = await client.query(`
-     SELECT * FROM tasks 
-     WHERE owner = $1
-   `,[owner_id]);
+     SELECT * FROM tasks t
+     JOIN users u ON t.owner = u.id
+     WHERE username = $1
+   `,[usernmae]);
 
      return allTasksByOwner;
 
@@ -50,6 +51,43 @@ const getMyTasks= async(owner_id) => {
      console.log(err);
   }
 }
+
+
+// Dashboard - read tasks completion status by percentage with username
+const getMyTasksPercentage = async(username) => {
+  try { 
+   const { rows: results} = await client.query(`
+   SELECT 
+    u.username,
+    ROUND(
+        (COUNT(CASE WHEN t.status = 'in-progress' THEN 1 END) * 100.0) / COUNT(*),
+        2
+    ) AS in_progress_percentage,
+    ROUND(
+        (COUNT(CASE WHEN t.status = 'paused' THEN 1 END) * 100.0) / COUNT(*),
+        2
+    ) AS paused_percentage,
+    ROUND(
+        (COUNT(CASE WHEN t.status = 'completed' THEN 1 END) * 100.0) / COUNT(*),
+        2
+    ) AS completed_percentage
+  FROM 
+      tasks t
+  JOIN
+      users u ON t.owner = u.id
+  WHERE 
+      u.username = $1
+  GROUP BY 
+      u.username;
+  `,[username]);
+
+    return results;
+
+ } catch (err) {
+    console.log(err);
+ }
+}
+
 
 
 // delete existing task
@@ -114,5 +152,6 @@ module.exports = {
   fetchAllTasksByProducts,
   deleteExistingTask,
   updateExistingTask,
-  getMyTasks
+  getMyTasks,
+  getMyTasksPercentage
 }

@@ -45,8 +45,11 @@
 - Read all tasks by project
 - GET /api/tasks/byproject/:project_id
 
-- Read all tasks for a certain owner
-- GET /api/tasks/byowner/:owner_id
+- Read all tasks for a certain username
+- GET /api/tasks/byowner/:username
+
+- Read all tasks by tasks completion percentage for a certain username
+- GET /api/tasks/percentagebyowner/:username
 
 - Create new tasks
 - POST /api/tasks/create-new-tasks

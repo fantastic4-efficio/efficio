@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const{fetchAllTasksByProducts,getMyTasks,deleteExistingTask,updateExistingTask,createTasks} = require('../db/tasks.cjs');
+const{fetchAllTasksByProducts,getMyTasks,getMyTasksPercentage,deleteExistingTask,updateExistingTask,createTasks} = require('../db/tasks.cjs');
 
 
 // GET - read all tasks by projects
@@ -19,12 +19,13 @@ router.get('/byproject/:project_id', async(req, res, next) => {
 });
 
 
-// GET - read all tasks for certain owner
-router.get('/byowner/:owner_id', async(req, res, next) => {
-  const {owner_id} = req.params;
+
+// GET - mydashboard - read all tasks for certain username
+router.get('/byowner/:username', async(req, res, next) => {
+  const {username} = req.params;
 
   try{
-    const allTasksByOwner = await getMyTasks(owner_id);
+    const allTasksByOwner = await getMyTasks(username);
 
     res.send(allTasksByOwner);
 
@@ -32,6 +33,23 @@ router.get('/byowner/:owner_id', async(req, res, next) => {
     next(err);
   }
 });
+
+
+
+// GET - mydashboard - read all tasks for certain owner with completion percentage
+router.get('/percentagebyowner/:username', async(req, res, next) => {
+  const {username} = req.params;
+
+  try{
+    const tasksPercentageByOwner = await getMyTasksPercentage(username);
+
+    res.send(tasksPercentageByOwner);
+
+  } catch(err) {
+    next(err);
+  }
+});
+
 
 
 // POST - create new tasks
