@@ -4,7 +4,9 @@ import { DateTime } from "luxon";
 import "react-calendar/dist/Calendar.css";
 import "./CalendarPage.css"; 
 
+
 const CalendarPage = () => {
+  const [nextTask, setNextTask] = useState(null);
   const [selectedDate, setSelectedDate] = useState(DateTime.now());
   const [tasks, setTasks] = useState([]);
   const [selectedTasks, setSelectedTasks] = useState([]);
@@ -26,35 +28,55 @@ const CalendarPage = () => {
   }, [token]);
 
   // Fetch tasks when `username` is set
-  useEffect(() => {
-    const fetchTasks = async () => {
-      if (!username) return;
-
-      try {
-        const response = await fetch(`http://localhost:3000/api/tasks/byowner/${username}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-
-        if (!response.ok) throw new Error(`Failed to fetch tasks: ${response.status}`);
-
-        const data = await response.json();
-        console.log("Fetched tasks:", data);
-
-        setTasks(data.map(task => ({
-          ...task,
-          endDate: task.end_date ? DateTime.fromISO(task.end_date).toISODate() : null, 
-        })));
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
+  const fetchTasks = async () => {
+    if (!username) {
+      console.warn("No username found.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/tasks/byowner/${username}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch tasks: ${response.status}`);
       }
-    };
-
-    fetchTasks();
+  
+      const data = await response.json();
+      console.log("Fetched tasks:", data);
+  
+      const formattedTasks = data.map((task) => ({
+        ...task,
+        endDate: task.end_date ? DateTime.fromISO(task.end_date).toISODate() : null,
+      }));
+  
+      setTasks(formattedTasks);
+  
+      // Find the soonest upcoming task
+      const upcomingTask = formattedTasks
+        .filter(task => task.endDate) // Ensure task has a due date
+        .sort((a, b) => DateTime.fromISO(a.endDate) - DateTime.fromISO(b.endDate)) // Sort by soonest
+        [0]; // Get the first task (soonest due)
+  
+      setNextTask(upcomingTask || null);
+  
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+  
+  // Fetch tasks when `username` is set
+  useEffect(() => {
+    if (username) {
+      fetchTasks();
+    }
   }, [username]);
-
+  
   // Handle date selection
   const handleDateChange = (date) => {
     const luxonDate = DateTime.fromJSDate(date);
