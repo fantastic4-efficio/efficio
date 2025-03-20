@@ -12,19 +12,35 @@ const COLORS = ["#00C49F", "#FF8042", "#FFBB28"];// Custom colors for pie chart
 
 const Dashboard = () => {
 
-  // const {username} = useParams();
-  const username = "johndoe";
   const [myProjects, setMyProjects] = useState([]);
   const [myTasks, setMyTasks] = useState([]);
   const [tasksPercentage, setTasksPercentage] = useState([]);
   const [chat, setChat] = useState('');
+  const [username, setUsername] = useState(null);
+
+  // Get and decode token
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUsername(payload.username);
+        console.log("Extracted username:", payload.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, [token]);
 
   const fetchProjects = async() => {
+    if (!username) return; 
+
     try{
       const response = await fetch(`/api/projects/byusername/${username}`, {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+          "Authorization": `Bearer ${token}`, // Retrieve token from storage
           "Content-Type": "application/json"
         }
       });
@@ -41,11 +57,13 @@ const Dashboard = () => {
   }}
   
   const fetchTasks = async() => {
+    if (!username) return; 
+
     try{
       const response = await fetch(`/api/tasks/byowner/${username}`, {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+          "Authorization": `Bearer ${token}`, // Retrieve token from storage
           "Content-Type": "application/json"
         }
       });
@@ -62,11 +80,13 @@ const Dashboard = () => {
   }}
 
   const fetchTasksPercentage = async() => {
+    if (!username) return; 
+
     try{
     const response = await fetch(`/api/tasks/percentagebyowner/${username}`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+        "Authorization": `Bearer ${token}`, // Retrieve token from storage
         "Content-Type": "application/json"
       }
     });
@@ -89,11 +109,14 @@ const Dashboard = () => {
     console.error("Error fetching tasks:", error);
   }}
 
+
   useEffect(() => {
-    fetchProjects();
-    fetchTasks();
-    fetchTasksPercentage();
-  }, []);
+    if (username) {
+      fetchProjects();
+      fetchTasks();
+      fetchTasksPercentage();
+    }
+  }, [username]); 
 
 console.log('myProjects:', myProjects);
 console.log('myTasks:', myTasks);
