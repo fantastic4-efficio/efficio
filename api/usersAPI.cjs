@@ -1,29 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const{createUsers, authenticateUser, fetchUsersByTeamName,fetchMyAccountInfo, getUserInfoWithToken} = require('../db/users.cjs');
-
-
-// Verify TOKEN
-const verifyToken = async(req,res,next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.JWT_SECRET,async (err,decoded)=> {
-    if (err) {
-      console.log(err);
-      return res.status(401).send("unauthorized");
-    } 
-    const user = await getUserInfoWithToken(token);
-    decoded.user =user;
-    req.user = decoded; 
-    next();
-  });
- 
-}
+const{createUsers, authenticateUser, fetchUsersByTeamName,fetchMyAccountInfo} = require('../db/users.cjs');
 
 
 // GET - Get users by team names
-router.get('/usersByTeam/:team_name', verifyToken, async(req, res, next) => {
+router.get('/usersByTeam/:team_name', async(req, res, next) => {
   const {team_name} = req.params;
 
   try{
@@ -36,7 +18,7 @@ router.get('/usersByTeam/:team_name', verifyToken, async(req, res, next) => {
 
 
 // GET - MyAccountPage - Get users by team names
-router.get('/myaccountinfo/:username', verifyToken, async(req, res, next) => {
+router.get('/myaccountinfo/:username', async(req, res, next) => {
   const {username} = req.params;
 
   try{
@@ -49,7 +31,7 @@ router.get('/myaccountinfo/:username', verifyToken, async(req, res, next) => {
 
 
 // POST - create new user//register
-router.post('/register', verifyToken, async(req, res, next) => {
+router.post('/register', async(req, res, next) => {
   try{
    const {first_name, last_name, password, username, email} = req.body;
   const createdUser = await createUsers(first_name, last_name, password, username, email);
@@ -64,7 +46,7 @@ router.post('/register', verifyToken, async(req, res, next) => {
  
  
  //POST - Login user
- router.post('/login', verifyToken, async(req, res, next) => {
+ router.post('/login', async(req, res, next) => {
    try{
      const {username, password} = req.body;
  

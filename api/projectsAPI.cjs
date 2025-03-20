@@ -2,26 +2,10 @@ const express = require('express');
 const router = express.Router();
 const{createProjects, getProjectsByTeams, getProjectsByUsers, getProjectsByUsername, deleteExistingProject} = require('../db/projects.cjs');
 
-// Verify TOKEN
-const verifyToken = async(req,res,next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.JWT_SECRET,async (err,decoded)=> {
-    if (err) {
-      console.log(err);
-      return res.status(401).send("unauthorized");
-    } 
-    const user = await getUserInfoWithToken(token);
-    decoded.user =user;
-    req.user = decoded; 
-    next();
-  });
- 
-}
 
 
 // GET - read projects by Team
-router.get('/byteams/:team_id', verifyToken, async(req, res, next) => {
+router.get('/byteams/:team_id', async(req, res, next) => {
   const {team_id} = req.params;
 
   try{
@@ -42,7 +26,7 @@ router.get('/byteams/:team_id', verifyToken, async(req, res, next) => {
 
 
 // GET - read projects by User
-router.get('/byusers/:user_id', verifyToken, async(req, res, next) => {
+router.get('/byusers/:user_id', async(req, res, next) => {
   const {user_id} = req.params;
 
   try{
@@ -62,7 +46,7 @@ router.get('/byusers/:user_id', verifyToken, async(req, res, next) => {
 
 
 // GET - mydashboard - read all project for certain username
-router.get('/byusername/:username', verifyToken, async(req, res, next) => {
+router.get('/byusername/:username', async(req, res, next) => {
   const {username} = req.params;
 
   try{
@@ -78,7 +62,7 @@ router.get('/byusername/:username', verifyToken, async(req, res, next) => {
 
 
 // POST - create products
-router.post('/create-new-project', verifyToken, async(req, res, next) => {
+router.post('/create-new-project', async(req, res, next) => {
   // const {user_id} = req.params;
 
   try{
@@ -101,7 +85,7 @@ router.post('/create-new-project', verifyToken, async(req, res, next) => {
 
 
 // DELETE - delete existing project
-router.delete('/delete-project/:project_id', verifyToken, async(req, res, next) => {
+router.delete('/delete-project/:project_id', async(req, res, next) => {
   const {project_id} = req.params;
   console.log("Deleting Project:", project_id);
   try{

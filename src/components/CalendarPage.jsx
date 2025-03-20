@@ -35,7 +35,7 @@ const CalendarPage = () => {
     }
   
     try {
-      const response = await fetch(`/api/tasks/byowner/${username}`, {
+      const response = await fetch(`http://localhost:3000/api/tasks/byowner/${username}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

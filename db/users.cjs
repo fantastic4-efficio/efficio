@@ -120,19 +120,4 @@ const fetchMyAccountInfo = async (username) => {
   }
 }
 
-
-const getUserInfoWithToken = async(token) => {
-  const userInfo = await jwt.verify(token, process.env.JWT_SECRET);
-  console.log(userInfo);
-  try{
-    const {rows} = await client.query(`
-      SELECT * FROM users WHERE username = $1
-    `,[userInfo.username])
-
-    return rows[0];
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-module.exports = { createUsers, authenticateUser, logInWithToken, getUserInfoWithToken, fetchUsersByTeamName, fetchMyAccountInfo };
+module.exports = { createUsers, authenticateUser, logInWithToken, fetchUsersByTeamName, fetchMyAccountInfo };

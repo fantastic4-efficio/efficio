@@ -6,21 +6,18 @@ import "./MyAccount.css";
 const MyAccount = () => {
 
    // const {username} = useParams();
+    const username = "johndoe";
     const [myAccountInfo, setMyAccountInfo] = useState({});
-    const [userTeams, setUserTeams] = useState([]);
-    const [username, setUsername] = useState(null);
+    const [userTeams, setUserTeams] = useState([])
     
-  // Get and decode token
-  const token = localStorage.getItem('token');
 
-  console.log('TOKEN',token)
 
     const fetchMyAccountInfo = async() => {
       try{
-        const response = await fetch(`/api/users/myaccountinfo/${username}`, {
+        const response = await fetch(`http://localhost:3000/api/users/myaccountinfo/${username}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`, // Retrieve token from storage
+            "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
             "Content-Type": "application/json"
           }
         });
