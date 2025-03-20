@@ -17,7 +17,8 @@ const Dashboard = () => {
   const [myProjects, setMyProjects] = useState([]);
   const [myTasks, setMyTasks] = useState([]);
   const [tasksPercentage, setTasksPercentage] = useState([]);
-
+  const [chat, setChat] = useState('');
+  
   const fetchProjects = async() => {
     try{
       const response = await fetch(`http://localhost:3000/api/projects/byusername/${username}`, {
