@@ -19,3 +19,9 @@
   background: #00C49F !important;
   color: white !important;
 }
+.highlight {
+  background-color: green !important;  /* Yellow highlight */
+  border-radius: 50%; /* Make it circular */
+  color: black; /* Ensure text is readable */
+  font-weight: bold;
+}
