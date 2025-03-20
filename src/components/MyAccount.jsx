@@ -14,7 +14,7 @@ const MyAccount = () => {
 
     const fetchMyAccountInfo = async() => {
       try{
-        const response = await fetch(`http://localhost:3000/api/users/myaccountinfo/${username}`, {
+        const response = await fetch(`/api/users/myaccountinfo/${username}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
