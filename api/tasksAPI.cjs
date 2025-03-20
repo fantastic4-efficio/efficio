@@ -57,7 +57,7 @@ router.post('/create-new-tasks', async(req, res, next) => {
   
   try{
     const{owner, subject, description, project_id, priority, start_date, end_date, status, parent_task_id, sub_task_id} = req.body;
-    
+    console.log(req.body);
     if (!owner || !subject || !description || !project_id || !start_date || !end_date || !status) {
       return res.status(400).json({error: "All fields are required!"});
     }
