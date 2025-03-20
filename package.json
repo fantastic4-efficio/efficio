@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server.cjs",
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
     "server": "nodemon server.cjs",
     "dev": "vite",
     "build": "vite build"
