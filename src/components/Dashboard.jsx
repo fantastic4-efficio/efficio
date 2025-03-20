@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const fetchProjects = async() => {
     try{
-      const response = await fetch(`https://efficio-kftq.onrender.com/api/projects/byusername/${username}`, {
+      const response = await fetch(`/api/projects/byusername/${username}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
@@ -42,7 +42,7 @@ const Dashboard = () => {
   
   const fetchTasks = async() => {
     try{
-      const response = await fetch(`https://efficio-kftq.onrender.com/api/tasks/byowner/${username}`, {
+      const response = await fetch(`/api/tasks/byowner/${username}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   const fetchTasksPercentage = async() => {
     try{
-    const response = await fetch(`https://efficio-kftq.onrender.com/api/tasks/percentagebyowner/${username}`, {
+    const response = await fetch(`/api/tasks/percentagebyowner/${username}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
