@@ -18,6 +18,9 @@
 - Get users by team name
 - GET /api/users/usersByTeam/:team_name
 
+- GET - MyAccountPage - Get users by team names
+- GET /api/users/myaccountinfo/:username
+
 - Register a new user
 - POST /api/users/register
 

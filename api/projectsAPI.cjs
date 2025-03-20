@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const{createProjects, getProjectsByTeams, getProjectsByUsers, deleteExistingProject} = require('../db/projects.cjs');
+const{createProjects, getProjectsByTeams, getProjectsByUsers, getProjectsByUsername, deleteExistingProject} = require('../db/projects.cjs');
 
 
 
