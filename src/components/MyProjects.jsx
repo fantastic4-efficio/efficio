@@ -4,20 +4,21 @@ import ChatBox from "./ChatBox";
 
 const MyProjects = () => {
   const [projects, setProjects] = useState([]);
-  const [projectName, setProjectName] = useState("");
+  const [project_name, setProjectName] = useState("");
   const [status, setStatus] = useState("");
   const [chat, setChat] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const [description, setDescription] = useState("");
 
 
   const token = localStorage.getItem("token");
 
   const handleCreate = async () => {
-    const newProject = { projectName, status, chat, dueDate, description };
-    
+    const newProject = { project_name, description, status, start_date, end_date };
+
     try {
-      const response = await fetch('/projects', {
+      const response = await fetch('/api/projects/create-new-project', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -42,7 +43,7 @@ const MyProjects = () => {
     if (!projectId) return;
 
     try {
-      const response = await fetch(`/projects/${projectId}`, {
+      const response = await fetch(`/api/projects/delete-project/${projectId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,9 +66,18 @@ const MyProjects = () => {
     <div className="projects-container">
       {/* Project Form */}
       <div className="project-form">
-        <input type="text" placeholder="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-        <input type="text" placeholder="Status (%)" value={status} onChange={(e) => setStatus(e.target.value)} />
-        <input type="date" placeholder="Project Due" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+        <input type="text" placeholder="Project Name" value={project_name} onChange={(e) => setProjectName(e.target.value)} />
+        <label>Status</label>
+        <select
+          onChange={(event) => setStatus(event.target.value)}
+          >
+            <option value="">Select Status</option>
+            <option value="in-progress">In Progress</option>
+            <option value="paused">Paused</option>
+            <option value="completed">Completed</option>
+          </select>
+        <input type="date" placeholder="StartDate" value={start_date} onChange={(e) => setStartDate(e.target.value)} />
+        <input type="date" placeholder="endDate" value={end_date} onChange={(e) => setEndDate(e.target.value)} />
         <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
         <ChatBox chat={chat} setChat={setChat} />
 
