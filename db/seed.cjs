@@ -60,7 +60,7 @@ const createTables = async() => {
         start_date DATE,
         end_date DATE,
         status TEXT,
-        parent_task_id UUID,
+        parent_task_id UUID REFERENCES tasks(id),
         sub_task_id UUID
       );
 
@@ -153,7 +153,7 @@ const syncAndSeed = async () => {
  // Normal task 2
  const task2 = await createTasks(`${user2.id}`, 'Write Documentation', 'Prepare user guides and API docs.',`${project2.id}`, 3, '2025-03-01', '2025-06-10', 'in-progress', null, null);
  // Normal task 3
- const task3 = await createTasks(`${user1.id}`,'Set Up Backend','Initialize Express.js with PostgreSQL.',`${project1.id}`,4,'2025-01-01','2025-05-03','in-progress',null,null);
+ const task3 = await createTasks(`${user1.id}`, 'Design UI Components', 'Create React components for the dashboard.', `${project1.id}`, 3, '2025-02-15', '2025-06-10', 'in-progress', null, null);
  // Normal task 4
  const task4 = await createTasks(`${user1.id}`,'Implement User Authentication','Set up user login system using JWT and bcrypt.',`${project1.id}`,3,'2025-02-01','2025-04-20','in-progress',null,null);
  // Normal task 5

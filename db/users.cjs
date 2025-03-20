@@ -81,4 +81,43 @@ const fetchUsersByTeamName = async (team_name) => {
   }
 }
 
-module.exports = { createUsers, authenticateUser, logInWithToken, fetchUsersByTeamName };
+
+const fetchMyAccountInfo = async (username) => {
+  try {
+    const { rows: myAccountInfo } = await client.query(`
+      WITH user_team AS (
+        SELECT 
+          u.id AS user_id,
+          u.first_name,
+          u.last_name,
+          u.email,
+          u.username,
+          t.id AS team_id,
+          t.team_name
+        FROM users u
+        JOIN teams_users tu ON u.id = tu.user_id
+        JOIN teams t ON tu.team_id = t.id
+      )
+    SELECT 
+      ut1.first_name AS user_first_name,
+      ut1.last_name AS user_last_name,
+      ut1.email AS user_email,
+      ut1.username AS user_username,
+      ut1.team_name,
+      ut2.first_name AS teammate_first_name,
+      ut2.last_name AS teammate_last_name,
+      ut2.email AS teammate_email,
+      ut2.username AS teammate_username
+    FROM user_team ut1
+    LEFT JOIN user_team ut2 
+      ON ut1.team_id = ut2.team_id 
+      AND ut1.user_id <> ut2.user_id
+    WHERE ut1.username = $1;
+    `,[username]);
+    return myAccountInfo
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { createUsers, authenticateUser, logInWithToken, fetchUsersByTeamName, fetchMyAccountInfo };

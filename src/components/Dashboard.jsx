@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [myProjects, setMyProjects] = useState([]);
   const [myTasks, setMyTasks] = useState([]);
   const [tasksPercentage, setTasksPercentage] = useState([]);
+  const [chat, setChat] = useState('');
 
   const fetchProjects = async() => {
     try{
@@ -38,8 +39,6 @@ const Dashboard = () => {
   } catch (error) {
     console.error("Error fetching projects:", error);
   }}
-
-
   
   const fetchTasks = async() => {
     try{
@@ -61,7 +60,6 @@ const Dashboard = () => {
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }}
-
 
   const fetchTasksPercentage = async() => {
     try{
@@ -114,8 +112,8 @@ console.log('tasksPecentage:', tasksPercentage);
             </tr>
           </thead>
           <tbody>{myProjects.length > 0? (
-            myProjects.map((projects) => (
-              <tr key={projects.id}>
+            myProjects.map((projects,index) => (
+              <tr key={index}>
                 <td>{projects.project_name}</td>
                 <td>{projects.description}</td>
                 <td>{projects.status}</td>
@@ -131,7 +129,7 @@ console.log('tasksPecentage:', tasksPercentage);
 
       <div className="chat-section">
         <h3>Project Chat</h3>
-        {/* <ChatBox chat={chat} setChat={setChat} /> */}
+        <ChatBox chat={chat} setChat={setChat}/>
       </div>
 
       <div className="tasks-section">
@@ -147,8 +145,8 @@ console.log('tasksPecentage:', tasksPercentage);
             </tr>
           </thead>
           <tbody>{myTasks.length > 0? (
-            myTasks.map((tasks) => (
-              <tr key={tasks.id}>
+            myTasks.map((tasks,index) => (
+              <tr key={index}>
                 <td>{tasks.subject}</td>
                 <td>{tasks.description}</td>
                 <td>{tasks.priority}</td>
@@ -185,7 +183,6 @@ console.log('tasksPecentage:', tasksPercentage);
                 {tasksPercentage.map((entry, index) => (
                   console.log('ENTRY', entry),
                   <Pie key={`cell-${index}`} fill={COLORS[index % COLORS.length]} value={entry} />
-                  
                 ))}
               </Pie>
               <Tooltip />
