@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./MyProjects.css"; // Ensure CSS file exists
+import "./NewProjects.css"; // Ensure CSS file exists
 import ChatBox from "./ChatBox";
 
-const MyProjects = () => {
+const NewProjects = () => {
   const [projects, setProjects] = useState([]);
   const [project_name, setProjectName] = useState("");
   const [status, setStatus] = useState("");
@@ -90,4 +90,4 @@ const MyProjects = () => {
   );
 };
 
-export default MyProjects;
+export default NewProjects;

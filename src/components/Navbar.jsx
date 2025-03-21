@@ -23,7 +23,7 @@ const Navbar = () => {
               <Link className="nav-link btn btn-outline-dark mx-2" to="/calendar">Calendar</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link btn btn-outline-dark mx-2" to="/projects">My Projects</Link>
+              <Link className="nav-link btn btn-outline-dark mx-2" to="/projects">New Projects</Link>
             </li>
 
             

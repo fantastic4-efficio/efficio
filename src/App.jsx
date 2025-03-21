@@ -7,7 +7,7 @@ import Calendar from "./components/CalendarPage";
 import Account from "./components/MyAccount";
 import Login from "./components/Login";  
 import Register from "./components/Register";  
-import MyProjects from "./components/MyProjects";
+import NewProjects from "./components/NewProjects";
 import Homepage from "./components/Homepage";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-task" element={<NewTask />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/projects" element={<MyProjects />} />
+          <Route path="/projects" element={<NewProjects />} />
           <Route path="/account" element={<Account />} />
           <Route path="/login" element={<Login />} />  
           <Route path="/register" element={<Register />} />  
