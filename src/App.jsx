@@ -39,7 +39,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/new-task" element={<NewTask />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/projects" element={<MyProjects />} />
+            <Route path="/projects" element={<NewProjects />} />
             <Route path="/account" element={<Account />} />
           </>
         )}

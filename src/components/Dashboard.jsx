@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dashboard.css"; // Ensure styles are applied
 import ChatBox from "./ChatBox";
+import NewProjects from "./NewProjects";
 
 
 
@@ -118,7 +119,7 @@ const Dashboard = () => {
     }
   }, [username]); 
 
-console.log('myProjects:', myProjects);
+console.log('myProjects:', NewProjects);
 console.log('myTasks:', myTasks);
 console.log('tasksPecentage:', tasksPercentage);
 
@@ -132,6 +133,7 @@ console.log('tasksPecentage:', tasksPercentage);
               <th>Subject</th>
               <th>Description</th>
               <th>Status</th>
+              <th>Modify</th>
             </tr>
           </thead>
           <tbody>{myProjects.length > 0? (
