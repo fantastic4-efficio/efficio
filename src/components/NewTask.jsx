@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./NewTask.css"; // Import the CSS file
 
 const NewTask = () => {
@@ -10,9 +10,64 @@ const NewTask = () => {
   const [ownerInput, setOwnerInput] = useState("");
   const [statusInput, setStatusInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
+  const [username, setUsername] = useState("");
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [projects, setProjects] = useState([]);
+  
+  const token = localStorage.getItem('token');
+  
+  useEffect(() => {
+    
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUsername(payload.username);
+        console.log("Extracted username:", payload.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+     }
+    }, [token]);
+
+    const getMyProjects = async () => {
+      const response = await fetch(`/api/projects/byusername/${username}`, {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      const responseObject = await response.json();
+      setProjects(responseObject);
+    }
+
+    const getMyTeamMembers = async () => {
+      const response = await fetch(`/api/users/myaccountinfo/${username}`, {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json"
+          }
+      });
+      const responseObject = await response.json();
+      setTeamMembers(responseObject);
+      
+    }
+    
+    useEffect(() => {
+      if (username) {
+        const wait = async() => {
+          await getMyTeamMembers()
+          await getMyProjects()
+        }
+        wait()
+      }
+    }, [username]); 
+    
 
   const submitTask = async (event) => {
     event.preventDefault();
+
 
     const response = await fetch("/api/tasks/create-new-tasks", {
       method: "POST",
@@ -57,12 +112,23 @@ const NewTask = () => {
         />
 
         <label>Project: </label>
-        <input
+        <select
+          className="task-input"
+          value={projectInput}
+          onChange={(event) => setProjectInput(event.target.value)}
+          >
+            <option value="">Select Project</option>
+            {projects.map((project) =>{
+              return <option value={project.project_name}>{project.project_name}</option>
+            })}
+          </select>
+
+        {/* <input
           className="task-input"
           placeholder="Project"
           value={projectInput}
           onChange={(event) => setProjectInput(event.target.value)}
-        />
+        /> */}
 
         <label>Start Date: </label>
         <input
@@ -82,7 +148,7 @@ const NewTask = () => {
 
         <label>Description: </label>
         <input 
-          ClassName="task-input"
+          className="task-input"
           type="text"
           value={descriptionInput}
           onChange={(event) => setDescriptionInput(event.target.value)}
@@ -103,12 +169,16 @@ const NewTask = () => {
         </select>
 
         <label>Owner: </label>
-        <input
+        <select
           className="task-input"
-          placeholder="Owner"
           value={ownerInput}
           onChange={(event) => setOwnerInput(event.target.value)}
-        />
+          >
+            <option value="">Select Owner</option>
+            {teamMembers.map((member) =>{
+              return <option value={member.teammate_username}>{member.teammate_username}</option>
+            })}
+          </select>
 
         <label>Status:</label>
         <select
