@@ -5,19 +5,35 @@ import "./MyAccount.css";
 
 const MyAccount = () => {
 
-   // const {username} = useParams();
-    const username = "johndoe";
     const [myAccountInfo, setMyAccountInfo] = useState({});
-    const [userTeams, setUserTeams] = useState([])
+    const [userTeams, setUserTeams] = useState([]);
+    const [username, setUsername] = useState(null);
+
+  // Get and decode token
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      try {
+         const payload = JSON.parse(atob(token.split('.')[1]));
+        setUsername(payload.username);
+        console.log("Extracted username:", payload.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+      }
+   }, [token]);
     
 
 
     const fetchMyAccountInfo = async() => {
+      if (!username) return; 
+
       try{
-        const response = await fetch(`http://localhost:3000/api/users/myaccountinfo/${username}`, {
+        const response = await fetch(`/api/users/myaccountinfo/${username}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`, // Retrieve token from storage
+            "Authorization": `Bearer ${token}`, 
             "Content-Type": "application/json"
           }
         });
@@ -51,14 +67,15 @@ const MyAccount = () => {
       setUserTeams(teams);
     }
 
-
       useEffect(() => {
-        const wait = async() => {
+          if (username) {
+            const wait = async() => {
 
-         await fetchMyAccountInfo()
-        }
-        wait()
-      }, []);
+              await fetchMyAccountInfo()
+             }
+             wait()
+          }
+        }, [username]); 
 
 
       console.log(`MY ACCOUNT INFO`, myAccountInfo);
