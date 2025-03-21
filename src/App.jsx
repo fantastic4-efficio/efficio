@@ -7,7 +7,7 @@ import Calendar from "./components/CalendarPage";
 import Account from "./components/MyAccount";
 import Login from "./components/Login";  
 import Register from "./components/Register";  
-import MyProjects from "./components/MyProjects";
+import NewProjects from "./components/NewProjects";
 import Homepage from "./components/Homepage";
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
   }, []);
 
   return (
+
     <Router>
       <Navbar onLogout={() => setAuth(false)} /> {/* ✅ Added onLogout */}
       <Routes>
