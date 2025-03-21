@@ -30,8 +30,8 @@ export default function Login({ onLogin }) {
         },
         body: JSON.stringify({
           username: username,
-          password: password,
-        }),
+          password: password
+        })
       });
 
       const responseObject = await response.json();

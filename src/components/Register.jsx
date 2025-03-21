@@ -40,11 +40,10 @@ const Register = ({ onRegister }) => {
       });
 
       const responseObject = await response.json();
-
-      if (!response.ok || !responseObject.token) {
+      console.log(responseObject);
+      if (!response.ok ) {
         setError(responseObject.error || "Registration failed.");
       } else {
-        localStorage.setItem("token", responseObject.token);
         onRegister?.(); // ✅ Notify App of login state change
         navigate("/dashboard");
       }
