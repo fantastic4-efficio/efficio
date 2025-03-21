@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ onRegister }) => {
   const [userName, setUsername] = useState("");
   const [passWord, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -9,13 +9,12 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate(); 
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!userName || !passWord || !confirmPassword) {
+    if (!userName || !passWord || !confirmPassword || !firstName || !lastName || !email) {
       setError("All fields are required.");
       return;
     }
@@ -25,29 +24,40 @@ const Register = () => {
       return;
     }
 
-    const response = await fetch('/api/users/register', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName,
-        password: passWord,
-        username: userName,
-        email: email
-      })
-    });
-    const responseObject = await response.json();
-    responseObject ? navigate('/login') : setError("Registration Failed.");
+    try {
+      const response = await fetch('/api/users/register', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          password: passWord,
+          username: userName,
+          email: email
+        })
+      });
 
-    setSuccess("Registration successful!"); // Just a message, no authentication or redirection
-    setError("");
+      const responseObject = await response.json();
+
+      if (!response.ok || !responseObject.token) {
+        setError(responseObject.error || "Registration failed.");
+      } else {
+        localStorage.setItem("token", responseObject.token);
+        onRegister?.(); // ✅ Notify App of login state change
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Register</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleRegister}>
         <input
           type="text"
@@ -99,6 +109,6 @@ const Register = () => {
       <p>Already have an account? <a href="/login">Login</a></p>
     </div>
   );
-}
+};
 
-export default Register
+export default Register;
