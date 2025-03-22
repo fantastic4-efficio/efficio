@@ -45,6 +45,9 @@
 - Delete existing projects ID
 - DELETE /api/projects/delete-project/:project_id
 
+- Update existing projects by project_id
+- PATCH /api/projects/update/:project_id
+
 
 ### Tasks
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const{createProjects, getProjectsByTeams, getProjectsByUsers, getProjectsByUsername, deleteExistingProject} = require('../db/projects.cjs');
+const{createProjects, getProjectsByTeams, getProjectsByUsers, getProjectsByUsername, deleteExistingProject, updateExistingProject} = require('../db/projects.cjs');
 
 
 
@@ -99,6 +99,25 @@ router.delete('/delete-project/:project_id', async(req, res, next) => {
     res.status(204).send();
   } catch(err) {
     next(err);
+  }
+});
+
+
+//  PATCH - edit an existing task by taskID
+router.patch('/update/:projectId', async(req, res, next) => {
+  try {
+    const {projectId} = req.params;
+    const updates = req.body; // Get fields to update
+
+    if (!Object.keys(updates).length) {
+      return res.status(400).json({ error: "No fields provided for update." });
+    }
+
+    const updatedProject = await updateExistingProject(projectId, updates);
+    
+    res.status(200).json({ message: "Project updated successfully!", project: updatedProject });
+  } catch (err) {
+    res.status(500).json({ error: err.message || "Internal server error" });
   }
 });
 

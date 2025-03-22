@@ -102,9 +102,47 @@ const deleteExistingProject = async(project_id) => {
 }
 
 
+// PATCH
+const updateExistingProject = async (projectId, updates) => {
+  try {
+    if (!Object.keys(updates).length) {
+      throw new Error("No fields provided for update.");
+    }
+
+    let query = 'UPDATE projects SET';
+    const values = [];
+    let index = 1;
+
+    // Dynamically construct the SQL query for partial updates
+    for (const [key, value] of Object.entries(updates)) {
+      query += ` ${key} = $${index},`;
+      values.push(value);
+      index++;
+    }
+
+    query = query.slice(0, -1); // Remove trailing comma
+    query += ` WHERE id = $${index} RETURNING *;`;
+    values.push(projectId);
+
+    const { rows } = await client.query(query, values);
+
+    if (rows.length === 0) {
+      throw new Error("Project not found.");
+    }
+
+    return rows[0];
+  } catch (err) {
+    console.error("Error updating project:", err.message);
+    throw err;
+  }
+};
+
+
+
 module.exports = { 
   createProjects, 
   getProjectsByTeams,
   getProjectsByUsers, 
   getProjectsByUsername,
-  deleteExistingProject};
+  deleteExistingProject,
+  updateExistingProject};
