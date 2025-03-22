@@ -5,6 +5,10 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const path = require("path");
+const favicon = require("serve-favicon");
+// Serve static files from public/
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 const apiRouter = require('./api/index.cjs');
 const { createServer } = require('node:http');
@@ -35,6 +39,7 @@ const io = new Server(server, {
 
 
 app.use('/api', apiRouter);
+
 
 
 app.get('/*', (req, res) => {
