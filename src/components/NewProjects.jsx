@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
+import { useNavigate } from "react-router-dom";
 import "./NewProjects.css"; // Ensure CSS file exists
 import ChatBox from "./ChatBox";
 
@@ -10,6 +11,7 @@ const NewProjects = () => {
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
 
   const token = localStorage.getItem("token");
@@ -31,6 +33,7 @@ const NewProjects = () => {
         const createdProject = await response.json();
         console.log("Project Created:", createdProject);
         setProjects((prevProjects) => [...prevProjects, createdProject]);
+        navigate('/Dashboard');
       } else {
         console.error('Failed to create project');
       }
@@ -76,7 +79,9 @@ const NewProjects = () => {
             <option value="paused">Paused</option>
             <option value="completed">Completed</option>
           </select>
+        <label>Start Date</label>
         <input type="date" placeholder="StartDate" value={start_date} onChange={(e) => setStartDate(e.target.value)} />
+        <lable>End Date</lable>
         <input type="date" placeholder="endDate" value={end_date} onChange={(e) => setEndDate(e.target.value)} />
         <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
         <ChatBox chat={chat} setChat={setChat} />
