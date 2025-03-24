@@ -18,10 +18,12 @@ const Dashboard = () => {
   const [tasksPercentage, setTasksPercentage] = useState([]);
   const [chat, setChat] = useState('');
   const [username, setUsername] = useState(null);
-
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentProject, setCurrentProject] = useState(null);
+  
   // Get and decode token
   const token = localStorage.getItem('token');
-
+  
   useEffect(() => {
     if (token) {
       try {
@@ -110,7 +112,6 @@ const Dashboard = () => {
     console.error("Error fetching tasks:", error);
   }}
 
-
   useEffect(() => {
     if (username) {
       fetchProjects();
@@ -119,9 +120,62 @@ const Dashboard = () => {
     }
   }, [username]); 
 
-console.log('myProjects:', NewProjects);
-console.log('myTasks:', myTasks);
-console.log('tasksPecentage:', tasksPercentage);
+
+  // Handle Delete Project
+  const handleDelete = async (projectId) => {
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
+
+    try {
+      const response = await fetch(`/api/projects/delete-project/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setMyProjects(myProjects.filter((project) => project.id !== projectId));
+      } else {
+        console.error("Failed to delete project");
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
+
+  // Handle Edit Button Click
+  const handleEdit = (project) => {
+    setCurrentProject(project);
+    setShowEditModal(true);
+  };
+
+  // Handle Save Changes
+  const handleSave = async () => {
+
+    try {
+      const response = await fetch(`/api/projects/update/${currentProject.id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentProject),
+      });
+
+      if (response.ok) {
+        setShowEditModal(false);
+        fetchProjects(); // Refresh the project list
+      } else {
+        console.error("Failed to update project");
+      }
+    } catch (error) {
+      console.error("Error updating project:", error);
+    }
+  };
+
+console.log(`showEditModal:`,showEditModal);
 
   return (
     <div className="dashboard-container">
@@ -137,11 +191,15 @@ console.log('tasksPecentage:', tasksPercentage);
             </tr>
           </thead>
           <tbody>{myProjects.length > 0? (
-            myProjects.map((projects,index) => (
+            myProjects.map((project,index) => (
               <tr key={index}>
-                <td>{projects.project_name}</td>
-                <td>{projects.description}</td>
-                <td>{projects.status}</td>
+                <td>{project.project_name}</td>
+                <td>{project.description}</td>
+                <td>{project.status}</td>
+                <td> 
+                  <button onClick={() => handleEdit(project)}>Edit</button>
+                  <button onClick={() => handleDelete(project.id)}>Delete</button>
+                </td>
               </tr>
             ))
           ):(<tr>
@@ -157,6 +215,48 @@ console.log('tasksPecentage:', tasksPercentage);
         <ChatBox chat={chat} setChat={setChat}/>
       </div>
 
+      {/* Edit Project Modal */}
+      {showEditModal && currentProject && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Edit Project</h3>
+            <label>Project Name:</label>
+            <input
+              type="text"
+              value={currentProject.project_name}
+              onChange={(e) =>
+                setCurrentProject({ ...currentProject, project_name: e.target.value })
+              }
+            />
+
+            <label>Description:</label>
+            <textarea
+              value={currentProject.description}
+              onChange={(e) =>
+                setCurrentProject({ ...currentProject, description: e.target.value })
+              }
+            ></textarea>
+
+            <label>Status:</label>
+            <select
+              value={currentProject.status}
+              onChange={(e) =>
+                setCurrentProject({ ...currentProject, status: e.target.value })
+              }
+            >
+              <option value="paused">paused</option>
+              <option value="in-progress">in-progress</option>
+              <option value="completed">completed</option>
+            </select>
+
+            <div className="modal-buttons">
+              <button onClick={handleSave}>Save</button>
+              <button onClick={() => setShowEditModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="tasks-section">
         <h3>My Tasks</h3>
         <table>
@@ -166,7 +266,7 @@ console.log('tasksPecentage:', tasksPercentage);
               <th>Description</th>
               <th>Priority</th>
               <th>Status</th>
-              <th>Due Date</th>
+              <th>End Date</th>
             </tr>
           </thead>
           <tbody>{myTasks.length > 0? (
@@ -205,10 +305,10 @@ console.log('tasksPecentage:', tasksPercentage);
                 dataKey="value"
                 label
               >
-                {tasksPercentage.map((entry, index) => (
-                  console.log('ENTRY', entry),
-                  <Pie key={`cell-${index}`} fill={COLORS[index % COLORS.length]} value={entry} />
-                ))}
+                {tasksPercentage.map((entry, index) => {
+                  console.log('ENTRY', entry);
+                  return <Pie key={`cell-${index}`} fill={COLORS[index % COLORS.length]} value={entry.value} />;
+                })}
               </Pie>
               <Tooltip />
             </PieChart>

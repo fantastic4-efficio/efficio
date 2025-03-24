@@ -114,6 +114,7 @@ const syncAndSeed = async () => {
   const team5 = await createTeams('Finance');
   const team6 = await createTeams('HR');
   const team7 = await createTeams('Laws');
+  const team8 = await createTeams('IC');
   console.log('TEAMS CREATED');
 
 
@@ -144,6 +145,7 @@ const syncAndSeed = async () => {
   const project5 = await createProjects(`Cybersecurity Enhancement`, `Improving security protocols and infrastructure`, `in-progress`, `2025-02-01`, `2025-05-15`);
   const project6 = await createProjects(`EdTech Learning Platform`, `Creating an interactive education platform with AI`, `paused`, `2025-05-01`, `2025-11-01`);
   const project7 = await createProjects(`Smart Home Automation`, `Developing an integrated platform for home automation and IoT devices`, `in-progress`, `2025-06-01`, `2025-12-01`);
+  const project8 = await createProjects(`John Doe Exclusive Project`, `Developing a custom solution tailored for John Doe's needs`,`paused`,`2025-06-01`, `2025-12-01`);
   console.log('PROJECTS CREATED');
 
 
@@ -200,6 +202,7 @@ const syncAndSeed = async () => {
   const assignTeamUser14 = await createTeamUser(await readTeamId('Marketing'), await readUserId('sophiam'));
   const assignTeamUser15 = await createTeamUser(await readTeamId('Marketing'), await readUserId('mikejohnson'));
   const assignTeamUser16 = await createTeamUser(await readTeamId('Finance'), await readUserId('danbrown'));
+  const assignTeamUser17 = await createTeamUser(await readTeamId('IC'), await readUserId('johndoe'));
   console.log('USER ASSIGNED TO TEAM');
 
 
@@ -211,6 +214,7 @@ const syncAndSeed = async () => {
   const assignTeamProject5 = await createTeamProject(await readTeamId('Technology'),await readProjectId('Cybersecurity Enhancement'));
   const assignTeamProject6 = await createTeamProject(await readTeamId('Marketing'),await readProjectId('EdTech Learning Platform'));
   const assignTeamProject7 = await createTeamProject(await readTeamId('Laws'),await readProjectId('Smart Home Automation'));
+  const assignTeamProject8 = await createTeamProject(await readTeamId('IC'),await readProjectId('John Doe Exclusive Project'));
   console.log('PROJECT ASSIGNED TO TEAM');
 
   console.log('CREATING MESSAGES');
