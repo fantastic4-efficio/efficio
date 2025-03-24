@@ -193,8 +193,8 @@ const NewTask = () => {
         </select>
 
         <button className="task-submit">Submit</button>
+        <button className="task-cancel">Cancel</button>
       </form>
-      <button className="task-cancel">Cancel</button>
     </>
   );
 };
